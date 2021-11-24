@@ -92,9 +92,9 @@ $shipList = Session::get('shipList');
 									<?php $index ++; ?>
                                 @endforeach
                             @else
-                                <div>
-                                    {{ trans('common.message.no_data') }}
-                                </div>
+                                <tr>
+                                    <td colspan="{{ Auth::user()->isAdmin == STAFF_LEVEL_MANAGER || Auth::user()->pos == STAFF_LEVEL_MANAGER ? 15 : 14}}">{{ trans('common.message.no_data') }}</td>
+                                </tr>
                             @endif
                             </tbody>
                         </table>
@@ -352,7 +352,7 @@ $shipList = Session::get('shipList');
 
         $('#general').find('input').not('.auto-complete').attr('autocomplete', 'off');
 
-        
+
         $("form").submit(function() {
             submitted = true;
         });

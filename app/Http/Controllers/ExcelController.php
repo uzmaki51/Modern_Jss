@@ -12,7 +12,6 @@ use App\Models\Operations\CP;
 use App\Models\Operations\Invoice;
 use App\Models\Operations\ShipOilSupply;
 use App\Models\Operations\VoyLog;
-use App\Models\Operations\VoyProgramPractice;
 use App\Models\Operations\VoyStatus;
 use App\Models\Operations\VoyStatusEvent;
 use App\Models\Operations\VoyStatusType;
@@ -1341,7 +1340,7 @@ class ExcelController extends Controller {
         foreach($members as $member)
             $memberList[] = $member['id'];
 
-        $list = ShipMemberExaming::getMemberMarks($memberList);
+        $list = [];
         if($paramExamCode == '')
             $examCodes = ShipMemberExaming::select('ExamCode')->whereIn('memberId', $memberList)->groupBy('ExamCode')->orderBy('ExamCode')->get();
         else
@@ -1528,67 +1527,6 @@ class ExcelController extends Controller {
             'excel_title'   =>  $excel_title,
             'excel_name'    =>  '船舶动态-'.$excel_title,
         ));
-    }
-
-    //----------------- 航次타산 (표준) ------------------//
-    public function shipCountStandard(Request $request)
-    {
-        Util::getMenuInfo($request);
-        $shipId = $request->get('shipId');
-        $voyId = $request->get('voy');
-
-        $shipList = ShipRegister::getShipListByOrigin();
-        $voyList = array();
-        if(count($shipList) > 0) {
-            if(is_null($shipId))
-                $shipId = $shipList[0]['RegNo'];
-            $voyList = CP::where('Ship_ID', $shipId)->orderBy('id', 'Desc')->get(['id','Voy_No', 'CP_No']);
-            if(is_null($voyId) && (count($voyList) > 0))
-                $voyId = $voyList[0]['id'];
-        }
-
-        $voyInfo = CP::find($voyId);
-        $proInfo = VoyProgramPractice::where('voyId', $voyId)->first();
-        if(is_null($proInfo))
-            $proInfo = new VoyProgramPractice();
-
-        $sailInfo = VoyLog::getSailTime($voyId);
-
-        $incomeInfo = Invoice::caculateVoyInvoice($voyId);
-        if(count($incomeInfo) > 0)
-            $incomeInfo = $incomeInfo[0];
-
-        if(isset($proInfo['CalculationDate'])) {
-            $year = substr($proInfo['CalculationDate'], 0, 4);
-            $plan = YearlyPlanInput::where('ShipID', $shipId)->where('Yearly', $year)->first();
-        } else {
-            $plan = YearlyPlanInput::where('ShipID', $shipId)->orderBy('Yearly', 'desc')->first();
-        }
-
-        $shipName = '全部';
-        foreach($shipList as $ship)
-            if($ship['RegNo'] == $shipId)
-                $shipName = $ship['shipName_En'].' | '.$ship['shipName_Cn'];
-        $voyName = '全部';
-        foreach($voyList as $voy)
-            if($voy['id'] == $voyId)
-                $voyName = $voy['Voy_No'].' | '.$voy['CP_No'];
-        $excel_title = '船舶名称: '.$shipName.' 航次: '.$voyName;
-        return view('operation.ship_count_standard',
-            [
-                'shipList'  =>  $shipList,
-                'voyList'   =>  $voyList,
-                'shipId'    =>  $shipId,
-                'voyId'     =>  $voyId,
-                'voyInfo'   =>  $voyInfo,
-                'proInfo'   =>  $proInfo,
-                'sailInfo'  =>  $sailInfo,
-                'incomeInfo'=>  $incomeInfo,
-                'planInfo'  =>  $plan,
-                'excel'     =>  1,
-                'excel_title' => $excel_title,
-                'excel_name'  => '航次盘算-'.$excel_title,
-            ]);
     }
 
     // 航次일수분석

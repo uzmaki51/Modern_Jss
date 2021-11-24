@@ -6,14 +6,12 @@ $ships = Session::get('shipList');
 @section('styles')
     <link href="{{ cAsset('css/pretty.css') }}" rel="stylesheet"/>
     <link href="{{ cAsset('css/dycombo.css') }}" rel="stylesheet"/>
-@endsection
-
-@section('scripts')
     <link href="{{ cAsset('assets/js/chartjs/chartist.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ cAsset('assets/js/chartjs/c3.css') }}" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="{{ cAsset('assets/js/chartjs/flot.css') }}">
-    
-    
+@endsection
+
+@section('scripts')
     <script src="{{ cAsset('assets/js/chartjs/chartist.js') }}"></script>
     <script src="{{ cAsset('assets/js/chartjs/chartjs.js') }}"></script>
     <script src="{{ cAsset('assets/js/chartjs/d3.js') }}"></script>
@@ -23,7 +21,7 @@ $ships = Session::get('shipList');
 
 @section('content')
 <style>
-    #table-income-expense-body tr td {    
+    #table-income-expense-body tr td {
         background:#ececec!important;
     }
 </style>
@@ -181,7 +179,7 @@ $ships = Session::get('shipList');
     <script src="{{ cAsset('assets/js/jsquery.dataTables.js') }}"></script>
     <script src="{{ asset('/assets/js/dataTables.rowsGroup.js') }}"></script>
     <script src="{{ cAsset('assets/js/bignumber.js') }}"></script>
-    
+
     <?php
 	echo '<script>';
     echo 'var now_year = ' . date("Y") . ';';
@@ -304,8 +302,10 @@ $ships = Session::get('shipList');
             $(evt.target).val($(evt.target).val().replaceAll(',','').replaceAll('$',''));
         });
 
-        $('#table_info').html('' + $("#select-table-ship option:selected").attr('data-name') + ' ');
-        $('#costs_info').html('' + $("#select-table-ship option:selected").attr('data-name') + ' ');
+        let shipName = $("#select-table-ship option:selected").attr('data-name');
+        shipName = __parseStr(shipName);
+        $('#table_info').html(shipName + ' ');
+        $('#costs_info').html(shipName + ' ');
 
         var token = '{!! csrf_token() !!}';
         var shipid_table;
@@ -323,7 +323,7 @@ $ships = Session::get('shipList');
                 processing: true,
                 serverSide: true,
                 searching: true,
-                bAutoWidth: false, 
+                bAutoWidth: false,
                 ajax: {
                     url: BASE_URL + 'ajax/operation/listByShipForPast',
                     type: 'POST',
@@ -360,7 +360,7 @@ $ships = Session::get('shipList');
                         $(row).attr('class', 'cost-item-even');
                     else
                         $(row).attr('class', 'cost-item-odd');
-                        
+
                     $('td', row).eq(1).html(data['voy_time']);
 
                     if (data['VOY_count'] != null) {
@@ -381,7 +381,7 @@ $ships = Session::get('shipList');
                     } else {
                         $('td', row).eq(4).html('-');
                     }
-                    
+
 
                     $('td', row).eq(5).attr('class', 'style-blue-input text-right');
                     $('td', row).eq(5).attr('style', 'padding-right:5px!important;');
@@ -447,7 +447,7 @@ $ships = Session::get('shipList');
                             } else {
                                 $(dest_obj).attr('class', 'text-right');
                             }
-                            
+
                             if ((i==7)||(i==8)) {
                                 if (data['NON_count'] != null) {
                                     $(dest_obj).attr('style', 'color:darkred;font-weight:bold;padding-right:5px!important;')
@@ -455,7 +455,7 @@ $ships = Session::get('shipList');
                             } else {
                                 $(dest_obj).attr('style', 'padding-right:5px!important;')
                             }
-                            
+
                             $(dest_obj).html(prettyValue2(data['debit_list'][i]));
                         }
                         else {
@@ -687,17 +687,22 @@ $ships = Session::get('shipList');
                 tab_text=tab_text+"<tr style='text-align:center;vertical-align:middle;font-size:16px;'>"+tab.rows[j].innerHTML+"</tr>";
             }
             tab_text=tab_text+"</table>";
-            
+
             tab_text=tab_text.replaceAll(/<A[^>]*>|<\/A>/g, "");
             tab_text=tab_text.replaceAll(/<img[^>]*>/gi,"");
             tab_text=tab_text.replaceAll(/<input[^>]*>|<\/input>/gi, "");
 
             var filename = $('#select-table-ship option:selected').text() + '_成本预计';
             exportExcel(tab_text, filename, filename);
-            
+
             return 0;
         }
 
+        function __parseStr(value) {
+            if(value == undefined || value == null || value == 0 || value == '') return '';
+
+            return value;
+        }
     </script>
 
 @endsection

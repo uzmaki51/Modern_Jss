@@ -117,7 +117,7 @@ class FinanceController extends Controller
     {
 		$url = $request->path();
 		$breadCrumb = BreadCrumb::getBreadCrumb($url);
-		
+
 		$year = $request->get('year');
         $month = $request->get('month');
 		if ($year == '') $year = date("Y");
@@ -127,11 +127,11 @@ class FinanceController extends Controller
 		$book_no = $max_item['max_no'];
 		if (($book_no == null) || ($book_no == '')) $book_no = (int)(substr($year,2) . "0000");
 
-		$start_year = DecisionReport::select(DB::raw('MIN(report_date) as min_date'))->first();
-        if(empty($start_year)) {
-            $start_year = '2020-01-01';
+		$start_year = DecisionReport::orderByDesc('report_date')->first();
+        if(!isset($start_year)) {
+            $start_year = date("Y-01-01");
         } else {
-            $start_year = $start_year['min_date'];
+            $start_year = $start_year['report_date'];
         }
         $start_month = date("m", strtotime($start_year));
         $start_year = date("Y", strtotime($start_year));
@@ -165,7 +165,7 @@ class FinanceController extends Controller
     {
 		$url = $request->path();
 		$breadCrumb = BreadCrumb::getBreadCrumb($url);
-		
+
 		$year = $request->get('year');
         $month = $request->get('month');
 		if ($year == '') $year = date("Y");
@@ -175,11 +175,11 @@ class FinanceController extends Controller
 		$book_no = $max_item['max_no'];
 		if (($book_no == null) || ($book_no == '')) $book_no = (int)(substr($year,2) . "0000");
 
-		$start_year = DecisionReport::select(DB::raw('MIN(report_date) as min_date'))->first();
-        if(empty($start_year)) {
-            $start_year = '2020-01-01';
+		$start_year = DecisionReport::orderByDesc('report_date')->first();
+        if(!isset($start_year)) {
+            $start_year = date("Y-01-01");
         } else {
-            $start_year = $start_year['min_date'];
+            $start_year = $start_year['report_date'];
         }
         $start_month = date("m", strtotime($start_year));
         $start_year = date("Y", strtotime($start_year));
@@ -208,7 +208,7 @@ class FinanceController extends Controller
 		return 0;
 	}
 
-	
+
 	public function saveBookList(Request $request)
 	{
 		$year = $request->get('select-year');
@@ -248,7 +248,7 @@ class FinanceController extends Controller
 				$record['ship_name'] = $keep_list[$i]->ship_name;
 				$record['report_id'] = $keep_list[$i]->report_id[0];
 				$record['remark'] = implode(",", $keep_list[$i]->report_id);
-				
+
 				// record water datetime
 				for($j=0;$j<count($keep_list[$i]->report_id);$j++)
 				{
@@ -320,7 +320,7 @@ class FinanceController extends Controller
 				$report_save_record['obj_no'] = $report_original_record->obj_no;
 				$report_save_record['obj_name'] = $report_original_record->obj_name;
 				$report_save_record['obj_type'] = $report_original_record->obj_type;
-				
+
 				if ($report_booknos[$index] != '')
 				{
 					if ($report_original_record->flowid == "Credit") {
@@ -351,7 +351,7 @@ class FinanceController extends Controller
 					$report_save_record['year'] = null;
 					$report_save_record['month'] = null;
 				}
-				
+
 				$report_save_record['create_time'] = $report_original_record->create_at;
 				$report_save_record->save();
 			}
