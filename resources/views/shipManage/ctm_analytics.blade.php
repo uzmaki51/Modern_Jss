@@ -189,7 +189,7 @@ $ships = Session::get('shipList');
                                             <thead class="">
                                                 <tr class="ctm-analytics">
                                                     <th colspan="13">
-                                                        {{ $shipName['shipName_En'] }}&nbsp;&nbsp;&nbsp;@{{ activeYear }}年 支出分析
+                                                        {{ isset($shipName['shipName_En']) ? $shipName['shipName_En'] : '' }}&nbsp;&nbsp;&nbsp;@{{ activeYear }}年 支出分析
                                                     </th>
                                                 </tr>
                                                 <tr>
