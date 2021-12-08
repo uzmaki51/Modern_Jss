@@ -1,11 +1,21 @@
 @extends('layout.header')
+<?php
+$isHolder = Session::get('IS_HOLDER');
+?>
+
+@section('styles')
+    <!--link href="{{ cAsset('css/pretty.css') }}" rel="stylesheet"/>
+    <link href="{{ cAsset('css/dycombo.css') }}" rel="stylesheet"/-->
+
+    <!--link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/-->
+@endsection
 
 @section('scripts')
     <script>
         var HOLDER = '{!! STAFF_LEVEL_SHAREHOLDER !!}';
         var CAPTAIN = '{!! STAFF_LEVEL_CAPTAIN !!}';
         var STAFF_LEVEL_MANAGER = '{!! STAFF_LEVEL_MANAGER !!}';
-        var IS_HOLDER = '{!! isset($userinfo['pos']) ? $userinfo['pos'] : 1 !!}';
+        var IS_HOLDER = '{!! $userinfo['pos'] !!}';
     </script>
 @endsection
 
@@ -91,7 +101,7 @@
                         </div>
                     </div>
 
-
+                    
                     <div class="col-xs-6 col-sm-6">
                         <div class="profile-user-info-striped member-table-outer-border">
                             <div class="profile-info-row member-table-border">
@@ -192,12 +202,7 @@
                 <div class="row mt-20" id="ship-list">
                     <div class="col-lg-12">
                         <h4>SHIP SELECTION</h4>
-                        <?php
-							if(isset($userinfo['shipList']))
-								$registerList = explode(',', $userinfo['shipList']);
-							else
-								$registerList = [];
-						?>
+                        <?php $registerList = explode(',', $userinfo['shipList']);?>
                         <select multiple="multiple" class="chosen-select form-control width-100" id="select-ship-list" name="shipList[]" data-placeholder="选择船舶...">
                             @foreach($shipList as $key => $item)
                                 <option value="{{ $item['IMO_No'] }}" {{ in_array($item['IMO_No'], $registerList) ? 'selected' : '' }}>{{ $item['NickName'] }}</option>

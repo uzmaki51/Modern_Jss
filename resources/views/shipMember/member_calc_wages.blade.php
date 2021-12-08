@@ -228,7 +228,7 @@ $isHolder = Session::get('IS_HOLDER');
     <script src="{{ asset('/assets/js/x-editable/ace-editable.min.js') }}"></script>
     <script src="{{ cAsset('assets/js/jsquery.dataTables.js') }}"></script>
     <script src="{{ asset('/assets/js/dataTables.rowsGroup.js') }}"></script>
-
+    
     <?php
 	echo '<script>';
 	echo 'var CurrencyLabel = ' . json_encode(g_enum('CurrencyLabel')) . ';';
@@ -256,7 +256,7 @@ $isHolder = Session::get('IS_HOLDER');
             $.fn.editableform.loading = "<div class='editableform-loading'><i class='light-blue icon-2x icon-spinner icon-spin'></i></div>";
             $.fn.editableform.buttons = '';
         });
-
+            
         var listTable = null;
         function initTable() {
             listTable = $('#table-shipmember-list').DataTable({
@@ -298,11 +298,11 @@ $isHolder = Session::get('IS_HOLDER');
                     else
                         $(row).attr('class', 'wage-item cost-item-odd');
                     //*/
-
+                        
                     $(row).attr('data-index', data['no']);
 
                     $('td', row).eq(0).attr('style', 'cursor:crosshair;background:linear-gradient(#fff, #d9f8fb);');
-
+                    
                     $('td', row).eq(0).attr('class', 'text-center disable-td add-no');
                     $('td', row).eq(1).attr('class', 'text-center disable-td');
                     $('td', row).eq(2).attr('class', 'text-center disable-td');
@@ -310,7 +310,7 @@ $isHolder = Session::get('IS_HOLDER');
                     /*
                     if (data['WageCurrency'] == 0) {
                         $('td', row).eq(3).html('¥');
-                        $('td', row).eq(3).attr('style','color:red');
+                        $('td', row).eq(3).attr('style','color:red');    
                     }
                     else {
                         $('td', row).eq(3).html('$');
@@ -334,14 +334,14 @@ $isHolder = Session::get('IS_HOLDER');
                     var rank = data['rank'];
                     if (rank == 'null' || rank == null) rank = '';
                     $('td', row).eq(2).html('<label>' + rank + '</label><input type="hidden" name="Rank[]" value="' + __parseStr(rank) + '">');
-
+                    
                     //$('td', row).eq(3).html('<label>' + ((data['WageCurrency'] == 0)?'¥':'$') + '</label><input type="hidden" name="Currency[]" value="' + data['WageCurrency'] + '">');
                     $('td', row).eq(3).html('<select name="Currency[]" class="form-control" style="color:' + ((data['WageCurrency'] == 0)?'red':'#026fcd') + '"><option value="0" style="color:red!important;"' + ((data['WageCurrency'] == 0)?'selected':'') + '>¥</option><option value="1" style="color:#1565C0!important;"' + ((data['WageCurrency'] == 1)?'selected':'') + '>$</option></select>')
-
+                    
                     //$('td', row).eq(4).html('<label>' + data['Salary'] + '</label><input type="hidden" name="Salary[]" value="' + data['Salary'] + '">');
                     $('td', row).eq(4).html('<input type="text" class="form-control" name="Salary[]" value="' + (data['Salary']==''?'':prettyValue(data['Salary'])) + '" style="width: 100%;text-align: center" autocomplete="off">');
                     //$('td', row).eq(4).html('<input type="text" class="form-control" name="Salary[]" value="' + data['Salary'] + '" style="width: 100%;text-align: center" autocomplete="off">');
-
+                    
                     //$('td', row).eq(5).html('<label>' + data['DateOnboard'] + '</label><input type="hidden" name="DateOnboard[]" value="' + data['DateOnboard'] + '">');
                     //$('td', row).eq(6).html('<label>' + data['DateOffboard'] + '</label><input type="hidden" name="DateOffboard[]" value="' + data['DateOffboard'] + '">');
                     $('td', row).eq(5).html('<div class="input-group"><input class="form-control add-trans-date date-picker text-center" name="DateOnboard[]" type="text" data-date-format="yyyy-mm-dd" value="' + data['DateOnboard'] + '"><span class="input-group-addon"><i class="icon-calendar "></i></span></div>');
@@ -381,7 +381,7 @@ $isHolder = Session::get('IS_HOLDER');
         minus_days = $("#minus-days").val();
         rate = $("#rate").val();
         shipId = $("#select-ship").val();
-        $('#search_info').html('"' + __parseStr($("#select-ship option:selected").attr('data-name')) + '" ' + year + '年' + month + '月');
+        $('#search_info').html('"' + $("#select-ship option:selected").attr('data-name') + '" ' + year + '年' + month + '月');
         initTable();
 
         function setValue(e, v, isNumber) {
@@ -402,7 +402,7 @@ $isHolder = Session::get('IS_HOLDER');
             var mm = String(today.getMonth() + 1).padStart(2, '0');
             var yyyy = today.getFullYear();
             today = yyyy + '-' + mm + '-' + dd;
-
+            
             var calc_date;
             if (original)
                 calc_date = today;
@@ -413,7 +413,7 @@ $isHolder = Session::get('IS_HOLDER');
                 }*/
                 calc_date = today;
             }
-
+            
             var TransInR = $('input[name="TransInR[]"]');
             var TransInD = $('input[name="TransInD[]"]');
             var TransDate = $('input[name="TransDate[]"]');
@@ -426,7 +426,7 @@ $isHolder = Session::get('IS_HOLDER');
             var dateoff = $('input[name="DateOffboard[]"]');
             var rate = $('#rate').val();
             var No = $('.add-no');
-
+            
             var sum_R = 0;
             var sum_D = 0;
             var sum_pre = 0;
@@ -522,8 +522,7 @@ $isHolder = Session::get('IS_HOLDER');
             minus_days = $("#minus-days").val();
             rate = $("#rate").val();
             if (shipName == "") return;
-
-            $('#search_info').html('"' + __parseStr($("#select-ship option:selected").attr('data-name')) + '" ' + year + '年' + month + '月');
+            $('#search_info').html('"' + $("#select-ship option:selected").attr('data-name') + '" ' + year + '年' + month + '月');
 
             if (listTable == null) {
                 initTable();
@@ -687,7 +686,7 @@ $isHolder = Session::get('IS_HOLDER');
                 else { $(evt.target).attr('style','color:#026fcd!important'); }
                 calcReport();
             });
-
+            
 
             $('input[name="Salary[]"]').on('change', function(evt) {
                 if (evt.target.value == '') return;
@@ -716,7 +715,7 @@ $isHolder = Session::get('IS_HOLDER');
                 $(evt.target).val(prettyValue(val));
                 calcReport();
             });
-
+            
             $('input[name="TransDate[]"]').on('keyup', function(e) {
                 calcReport();
             });
@@ -815,7 +814,7 @@ $isHolder = Session::get('IS_HOLDER');
             var add_purchase_date = $('#add-purchase-date').val();
             var add_remark = $('#add-remark').val();
             var add_bank_info = $('#add-bank-info').val();
-
+            
             var year = $("#select-year option:selected").val();
             var month = $("#select-month option:selected").val();
             var minus_days = $("#minus-days").val();
@@ -834,7 +833,7 @@ $isHolder = Session::get('IS_HOLDER');
             {
                 next_month ++;
             }
-
+            
             now = new Date(year + "-" + month + "-01");
             now.setDate(now.getDate());
             now = now.getFullYear() + "-"  +(now.getMonth() + 1).toString().padStart(2, '0') + "-" + now.getDate().toString().padStart(2, '0');
@@ -860,7 +859,7 @@ $isHolder = Session::get('IS_HOLDER');
             if (add_signon_date <= now ) start_day = now;
             var diff = new Date(new Date(add_signoff_date) - new Date(start_day));
             var signon_days = diff/1000/60/60/24+1;
-
+            
             if (add_currency == 0) {
                 add_money_R = add_wage * daysInMonth(month, year) / signon_days - add_minus_money;
                 add_money_D = add_money_R * rate;
@@ -870,14 +869,14 @@ $isHolder = Session::get('IS_HOLDER');
             }
             var new_row = '<tr class="wage-item disable-tr" role="row"><td class="text-center disable-td add-no new-member" style="height:18.5px;cursor:crosshair;background:linear-gradient(#fff, #d9f8fb);">' + ($('.wage-item').length+1) +
             '<input type="hidden" name="MemberId[]" value="new_' + ($('.new-member').length) + '">' +
-            '</td><td class="text-center disable-td"><label>' + add_name + '</label><input type="hidden" name="Names[]" value="' + add_name + '">' +
+            '</td><td class="text-center disable-td"><label>' + add_name + '</label><input type="hidden" name="Names[]" value="' + add_name + '">' + 
             '</td><td class="text-center disable-td"><label>' + add_rank + '</label><input type="hidden" name="Rank[]" value="' + add_rank + '">'+
-
+            
             //'</td><td class="text-center disable-td add-currency" ' + ((add_currency == 0)?'style="color:red"':'style="color:#026fcd!important"') + '><label>' + ((add_currency == 0)?'¥':'$') + '</label><input type="hidden" name="Currency[]" value="' + add_currency + '">' +
               '</td><td class="text-center disable-td add-currency">' + '<select name="Currency[]" class="form-control" style="color:' + ((add_currency == 0)?'red':'#026fcd') + '"><option value="0" style="color:red!important;"' + ((add_currency == 0)?'selected':'') + '>¥</option><option value="1" style="color:#1565C0!important;"' + ((add_currency == 1)?'selected':'') + '>$</option></select>' +
               //$('td', row).eq(3).html('<select name="Currency[]" class="form-control" style="color:' + ((add_currency == 0)?'red':'#026fcd') + '"><option value="0" style="color:red!important;"' + ((data['WageCurrency'] == 0)?'selected':'') + '>¥</option><option value="1" style="color:#1565C0!important;"' + ((add_currency == 1)?'selected':'') + '>$</option></select>')
-
-            '</td><td class="text-center add-salary"><input type="text" class="form-control" name="Salary[]" value="' + add_wage.toFixed(2) + '" style="width: 100%;text-align: center" autocomplete="off">'+
+            
+            '</td><td class="text-center add-salary"><input type="text" class="form-control" name="Salary[]" value="' + add_wage.toFixed(2) + '" style="width: 100%;text-align: center" autocomplete="off">'+ 
             //'</td><td class="text-center disable-td"><label>' + add_signon_date + '</label><input type="hidden" name="DateOnboard[]" value="' + add_signon_date + '">'+
             //'</td><td class="text-center disable-td"><label>' + add_signoff_date + '</label><input type="hidden" name="DateOffboard[]" value="' + add_signoff_date + '">'+
             '</td><td class="text-center disable-td"><div class="input-group"><input class="form-control add-trans-date date-picker text-center" name="DateOnboard[]" type="text" data-date-format="yyyy-mm-dd" value="' + add_signon_date + '"><span class="input-group-addon"><i class="icon-calendar "></i></span></div>' +
@@ -889,8 +888,8 @@ $isHolder = Session::get('IS_HOLDER');
             '</td><td class="text-center disable-td add-transD"><label>' + add_money_D.toFixed(2) + '</label><input type="hidden" name="TransInD[]" value="' + add_money_D.toFixed(2) + '">' +
             '</td><td class=" text-center""><div class="input-group"><input class="form-control add-trans-date date-picker text-center" name="TransDate[]" type="text" data-date-format="yyyy-mm-dd" value="' + add_purchase_date + '"><span class="input-group-addon"><i class="icon-calendar "></i></span></div></td><td class=" text-center"><input type="text" class="form-control" name="Remark[]" value="'+ add_remark + '" style="width: 100%;text-align: left;" autocomplete="off"></td><td class="text-center disable-td add-bankinfo" style="word-wrap:break-word;text-align: left"><label>'+ add_bank_info + '</label><input type="hidden" name="BankInfo[]" value="' + add_bank_info + '">' +
             '</td><td class=" text-center"><div class="action-buttons"><a class="red" onclick="javascript:deleteItem(this)"><i class="icon-trash"></i></a></div></td></tr>';
-
-
+            
+            
             $('.wage-item:eq(' + row_index + ')').last().after(new_row);
             setDatePicker();
             setEvents();
@@ -932,7 +931,7 @@ $isHolder = Session::get('IS_HOLDER');
             var real_tab = document.getElementById('table-shipmember-list');
             var tab = real_tab.cloneNode(true);
             tab_text=tab_text+"<tr><td colspan='14' style='font-size:24px;font-weight:bold;border-left:hidden;border-top:hidden;border-right:hidden;text-align:center;vertical-align:middle;'>" + $('#search_info').html() + "份工资单</td></tr>";
-            for(var j = 0 ; j < tab.rows.length ; j++)
+            for(var j = 0 ; j < tab.rows.length ; j++) 
             {
                 if (j == 0) {
                     for (var i=0; i<tab.rows[j].childElementCount;i++) {
@@ -974,7 +973,7 @@ $isHolder = Session::get('IS_HOLDER');
                     info = real_tab.rows[j].childNodes[13].childNodes[0].value;
                     tab.rows[j].childNodes[13].innerHTML = info;
                 }
-
+                
                 tab_text=tab_text+"<tr style='text-align:center;vertical-align:middle;font-size:16px;'>"+tab.rows[j].innerHTML+"</tr>";
             }
             tab_text=tab_text+"</table>";
@@ -982,8 +981,8 @@ $isHolder = Session::get('IS_HOLDER');
             tab_text= tab_text.replaceAll(/<img[^>]*>/gi,"");
             tab_text= tab_text.replaceAll(/<input[^>]*>|<\/input>/gi, "");
 
-            var filename = $("#select-ship option:selected").html() + '_' + year + '_' + month + '_工资单';
-            exportExcel(tab_text, filename, year + '_' + month + '_工资单');
+            var filename = $("#select-ship option:selected").html() + '_' + year + '年_' + month + '月_工资单';
+            exportExcel(tab_text, filename, filename);
             return 0;
         }
 
@@ -1005,12 +1004,6 @@ $isHolder = Session::get('IS_HOLDER');
             }
         }
         checkPos();
-
-        function __parseStr(value) {
-            if(value == undefined || value == null || value == 0 || value == '') return '';
-
-            return value;
-        }
     </script>
 
 @endsection

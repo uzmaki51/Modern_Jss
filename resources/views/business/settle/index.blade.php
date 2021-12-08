@@ -184,7 +184,7 @@
                                 <td class="no-border"></td>
                             </tr>
                             <!-- Main Dynami Info End -->
-
+                            
                             <!-- Else Dynami Info Begin -->
                             <tr class="gray-tr">
                                 <td class="no-border-td" colspan="9">&nbsp;</td>
@@ -217,7 +217,7 @@
                                             <input class="form-control minute-input" v-model="elseInfo.minute" name="origin_minute" @change="inputChange">
                                         </label>
                                     </div>
-
+                                    
                                 </td>
                                 <td class="center">
                                     <my-currency-input name="origin_fo" v-model="elseInfo.rob_fo" class="form-control text-center" :style="debitClass(elseInfo.rob_fo)" v-bind:prefix="''" v-bind:fixednumber="2"></my-currency-input>
@@ -490,7 +490,7 @@
                                 </td>
                                 <td class="center" colspan="3">@{{ number_format(debitInfo.total) == '' ? '' : '$' }} @{{ number_format(debitInfo.total) }}</td>
                                 <td class="center" colspan="2">
-
+                                    
                                 </td>
                             </tr>
 
@@ -527,6 +527,9 @@
 
         var shipId = '{!! $shipId !!}';
         var voyId = '{!! $voyId !!}';
+        var shipInfo = '{!! $shipInfo !!}';
+        shipInfo=shipInfo.replaceAll(/\n/g, "\\n").replaceAll(/\r/g, "\\r").replaceAll(/\t/g, "\\t");
+        shipInfo = JSON.parse(shipInfo);
         var DYNAMIC_SUB_SALING = '{!! DYNAMIC_SUB_SALING !!}';
         var DYNAMIC_SUB_LOADING = '{!! DYNAMIC_SUB_LOADING !!}';
         var DYNAMIC_SUB_DISCH = '{!! DYNAMIC_SUB_DISCH !!}';
@@ -585,10 +588,10 @@
 
                             if(this.prefix != undefined)
                                 prefix = this.prefix + ' ';
-
+                            
                             if(this.value == 0 || this.value == undefined || isNaN(this.value))
                                 return '';
-
+                            
                             return prefix + number_format(this.value, fixedLength);
                         }
                     },
@@ -596,7 +599,7 @@
                         if (modifiedValue == 0 || modifiedValue == undefined || isNaN(modifiedValue)) {
                             modifiedValue = 0
                         }
-
+                        
                         this.$emit('input', parseFloat(modifiedValue));
                     },
                 }
@@ -622,7 +625,7 @@
         $(function() {
             initialize();
         });
-
+        
         function initialize() {
             vSettleObj = new Vue({
                 el: '#settle-info-div',
@@ -645,7 +648,7 @@
                         if(__parseFloat(this.mainInfo.freight) != 0)
                             this.mainInfo.freight_price = BigNumber(this.mainInfo.freight).multipliedBy(this.mainInfo.cgo_qty).toFixed(2);
                         // else
-
+                        
 
                         // this.mainInfo.freight_price = BigNumber
                         this.mainInfo.else_time = BigNumber(this.mainInfo.total_sail_time).minus(this.mainInfo.sail_time).minus(this.mainInfo.load_time).toFixed(2);
@@ -741,7 +744,7 @@
                                 this.elseInfo.discharge.push([]);
                             else
                                 this.deleteElseInfo(type, index, id);
-
+                                
                         } else {
                             if(index == 0)
                                 this.elseInfo.fuel.push([]);
@@ -776,7 +779,7 @@
                                 let dis_date = $("[name=dis_date]").val();
                                 let dis_hour = $("[name=dis_hour]").val();
                                 let dis_minute = $("[name=dis_minute]").val();
-
+                                
                                 $_this.mainInfo.total_sail_time = __getTermDay(load_date + ' ' + load_hour + ':' + load_minute + ':00', dis_date + ' ' + dis_hour + ':' + dis_minute + ':00');
                                 $_this.calcInfo();
                                 isChangeStatus = true;
@@ -787,7 +790,7 @@
                                 $_this.elseInfo[where][index][type + '_date'] = $(this).val();
                             }
                         });
-
+                        
                         $_this.$forceUpdate();
                     },
                     number_format: function(value, decimal = 2) {
@@ -895,7 +898,7 @@
                         success: function(data) {
                             location.href = '/business/settleMent?shipId=' + $_this.shipId + '&voyId=' + $_this.voyId;
                         }
-
+                        
                     });
                 }
             });
@@ -935,7 +938,7 @@
             if (e.key === "Enter") {
                 var self = $(this), form, focusable, next;
                 form = $('#dynamic-form');
-
+            
                 focusable = form.find('input,a,select,textarea').filter(':visible');
                 next = focusable.eq(focusable.index(this)+1);
                 if (next.length) {
@@ -951,7 +954,7 @@
             real_tab = document.getElementById('table-settlement');
             var tab = real_tab.cloneNode(true);
             tab_text=tab_text+"<tr><td colspan='8' style='font-size:24px;font-weight:bold;border-left:hidden;border-top:hidden;border-right:hidden;text-align:center;vertical-align:middle;'>" + $('#search_info').html() + '_'  + $('#voy_list').val() + "_航次结算表" + "</td></tr>";
-
+            
             for(var j = 0; j < tab.rows.length ; j++)
             {
                 if (j==0 || j==8 || j==14 || j==19 || j==25 || j==38) {
@@ -990,9 +993,9 @@
             tab_text= tab_text.replaceAll(/<img[^>]*>/gi,"");
             tab_text= tab_text.replaceAll(/<input[^>]*>|<\/input>/gi, "");
 
-            var filename = $('#search_info').html() + '_'  + $('#voy_list').val() + "_航次结算表";
+            var filename = $('#ship_list option:selected').text() + 'V'  + $('#voy_list').val() + "_航次结算";
             exportExcel(tab_text, filename, filename);
-
+            
             return 0;
         }
 
@@ -1018,9 +1021,9 @@
             let dis_date = $("[name=dis_date]").val();
             let dis_hour = $("[name=dis_hour]").val();
             let dis_minute = $("[name=dis_minute]").val();
-
+            
             $_this.mainInfo.total_sail_time = __getTermDay(load_date + ' ' + load_hour + ':' + load_minute + ':00', dis_date + ' ' + dis_hour + ':' + dis_minute + ':00');
-            $_this.calcInfo();
+            $_this.calcInfo(); 
             isChangeStatus = true;
         }
 

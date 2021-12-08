@@ -14,6 +14,7 @@
     <link href="{{ cAsset('css/pretty.css') }}" rel="stylesheet"/>
     <link href="{{ cAsset('css/vue.css') }}" rel="stylesheet"/>
     <link href="{{ cAsset('css/dycombo.css') }}" rel="stylesheet"/>
+
 @endsection
 
 @section('scripts')
@@ -25,7 +26,7 @@
     <link href="{{ cAsset('assets/js/chartjs/chartist.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ cAsset('assets/js/chartjs/c3.css') }}" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="{{ cAsset('assets/js/chartjs/flot.css') }}">
-
+    
     <script src="{{ cAsset('assets/js/chartjs/chartist.js') }}"></script>
     <script src="{{ cAsset('assets/js/chartjs/chartjs.js') }}"></script>
     <script src="{{ cAsset('assets/js/chartjs/d3.js') }}"></script>
@@ -87,7 +88,7 @@
                             <span id="search_info">"@{{ shipName }}"</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="font-bold">@{{ page_title }}</span>
                         </strong>
                     </div>
-
+                
                     <div class="btn-group f-right">
                         <button class="btn btn-warning btn-sm save-btn" @click="fnExcelReport"><i class="icon-table"></i> {{ trans('common.label.excel') }}</button>
                     </div>
@@ -177,7 +178,7 @@
                                     <td class="text-center not-striped-td">装卸货</td>
                                     <td class="text-center not-striped-td" style="border-left: 2px solid #ff9207;">FO</td>
                                     <td class="text-center not-striped-td" style="border-right: 2px solid #ff9207; width: 50px;">DO</td>
-                                    <td class="text-center not-striped-td">FO</td>
+                                    <td class="text-center not-striped-td">FO</td> 
                                     <td class="text-center not-striped-td">DO</td>
                                     <td class="text-center not-striped-td">FO</td>
                                     <td class="text-center not-striped-td">DO</td>
@@ -205,7 +206,7 @@
                             </tbody>
                         </table>
                     </div>
-
+                
                 <div class="table-responsive">
                     <table class="dynamic-result-table analyze-table table-striped" v-show="record_type == 'analyze'"  id="table-list-analysis">
                         <thead>
@@ -324,11 +325,11 @@
                     <strong style="font-size: 16px; margin: 30px auto 10px;" id="graph_title">@{{ shipName }} @{{ activeYear == 0 ? '' : activeYear }}年经济日占率</p>
                 </div>
                 <div class="chart-div">
-
+                    
                 </div>
             </div>
 
-
+            
             <!-- Main Contents End -->
         </div>
         <audio controls="controls" class="d-none" id="warning-audio">
@@ -367,7 +368,7 @@
         var RECORD_TYPE = '{!! $record_type !!}';
         var ACTIVE_YEAR = '{!! $activeYear !!}';
 
-
+        
         var DYNAMIC_SAILING = '{!! DYNAMIC_SAILING !!}';
         var DYNAMIC_CMPLT_DISCH = '{!! DYNAMIC_CMPLT_DISCH !!}';
         const DAY_UNIT = 1000 * 3600;
@@ -462,7 +463,7 @@
                                 searchObj.voy_list = Object.assign([], [], result['cp_list']);
                                 searchObj.year_list = Object.assign([], [], result['yearList']);
                                 shipInfo = result['shipInfo'];
-
+                                
                                 if(searchObj.voy_list.length > 0) {
                                     if(voyId == '') {
                                         searchObj.activeVoy = searchObj.voy_list[0]['Voy_No'];
@@ -502,7 +503,7 @@
                             $('.page-title').text('动态分析');
                             this.getAnalyzeData();
                         }
-
+                        
                     },
                     onChangeYear: function(e) {
                         this.activeYear = e.target.value;
@@ -523,7 +524,7 @@
                         $_this = [];
                         $.ajax({
                             url: BASE_URL + 'ajax/business/dynamic/search',
-                            type: 'post',
+                            type: 'post', 
                             data: {
                                 shipId: searchObj.shipId,
                                 voyId: searchObj.activeVoy,
@@ -579,7 +580,7 @@
                                         realData['voy_end'] = tmpData[tmpData.length - 1]['Voy_Date'] + ' ' + tmpData[tmpData.length - 1]['Voy_Hour'] + ':' + tmpData[tmpData.length - 1]['Voy_Minute'];
                                         realData['lport'] = cpData[value]['LPort'] == false ? '-' : cpData[value]['LPort'];
                                         realData['dport'] = cpData[value]['DPort'] == false ? '-' : cpData[value]['DPort'];
-
+                                        
                                         tmpData.forEach(function(data_value, data_key) {
                                             total_distance += data_key > 0 ? __parseFloat(data_value["Sail_Distance"]) : 0;
                                             if(data_key > 0) {
@@ -655,7 +656,7 @@
                                         realData.loading_time = loading_time.toFixed(COMMON_DECIMAL);
                                         realData.disch_time = disch_time.toFixed(COMMON_DECIMAL);
                                         realData.total_loading_time = BigNumber(__parseFloat(loading_time.toFixed(2))).plus(__parseFloat(disch_time.toFixed(2))).plus(__parseFloat(total_sail_time.toFixed(2)));
-
+                                        
                                         realData.total_waiting_time = total_waiting_time.toFixed(COMMON_DECIMAL);
                                         realData.total_weather_time = total_weather_time.toFixed(COMMON_DECIMAL);
                                         realData.total_repair_time = total_repair_time.toFixed(COMMON_DECIMAL);
@@ -702,7 +703,7 @@
 
                                 $('.chart-div').empty();
                                 $('.chart-div').append('<canvas id="economic-chart" height="250" class="chartjs-demo"></canvas>');
-
+                                
 
                                 var graphChart = new Chart(document.getElementById('economic-chart').getContext("2d"), {
                                     type: 'line',
@@ -723,7 +724,7 @@
                                         callbacks: {
                                             label: function(tooltipItem) {
                                                     return tooltipItem.yLabel + '%';
-                                                }
+                                                }   
                                             }
                                         },
                                         responsive: true,
@@ -784,7 +785,7 @@
                                     // searchObj.prevData['Voy_Type'] = DynamicSub[searchObj.prevData['Voy_Type']];
                                     // searchObj.prevData['Voy_Status'] = DynamicStatus[searchObj.prevData['Voy_Status']][0];
                                 }
-
+                                
                                 if(data['currentData'] != undefined && data['currentData'] != null && data['currentData'].length > 0) {
                                     searchObj.currentData = Object.assign([], [], data['currentData']);
                                     // searchObj.setTotalInfo(data);
@@ -893,9 +894,9 @@
 
                                     searchObj.total_sail_time = total_sail_time.toFixed(2);
                                     searchObj.total_loading_time = BigNumber(loading_time.toFixed(2)).plus(disch_time.toFixed(2)).toFixed(2);
-
+                                    
                                     searchObj.average_speed = BigNumber(searchObj.total_distance).div(searchObj.total_sail_time).div(24).toFixed(1);
-
+                                    
                                     // searchObj.economic_rate = BigNumber(total_loading_time).plus(searchObj.total_sail_time).div(searchObj.sail_time).multipliedBy(100).toFixed(1);
                                     searchObj.prevData['ROB_FO'] = __parseFloat(searchObj.prevData['ROB_FO']);
                                     searchObj.prevData['ROB_DO'] = __parseFloat(searchObj.prevData['ROB_DO']);
@@ -906,7 +907,7 @@
 
                                     let loadTmp = BigNumber(__parseFloat(loading_time.toFixed(2))).plus(__parseFloat(disch_time.toFixed(2))).plus(__parseFloat(total_sail_time.toFixed(2)));
                                     let non_economic_date = BigNumber(__parseFloat(total_waiting_time.toFixed(2))).plus(__parseFloat(total_weather_time.toFixed(2))).plus(__parseFloat(total_repair_time.toFixed(2))).plus(__parseFloat(total_supply_time.toFixed(2))).plus(__parseFloat(total_else_time.toFixed(2))).toFixed(2)
-
+                                    
                                     searchObj.sail_time = __parseFloat(non_economic_date) + __parseFloat(loadTmp);
                                     searchObj.economic_rate = BigNumber(loadTmp).div(__parseFloat(searchObj.sail_time.toFixed(2))).multipliedBy(100).toFixed(1);
 
@@ -929,7 +930,7 @@
                         })
                     },
                     setTotalInfo: function(data) {
-
+                        
                     },
                     setPortName: function() {
                         searchObj.voy_list.forEach(function(value, index) {
@@ -1012,8 +1013,8 @@
                             var real_tab = document.getElementById('table-list-all');
                             var tab = real_tab.cloneNode(true);
                             tab_text=tab_text+"<tr><td colspan='20' style='font-size:24px;font-weight:bold;border-left:hidden;border-top:hidden;border-right:hidden;text-align:center;vertical-align:middle;'>航船动态</td></tr>";
-
-                            for(var j = 0; j < tab.rows.length ; j++)
+                            
+                            for(var j = 0; j < tab.rows.length ; j++) 
                             {
                                 if (tab.rows[j].classList.contains('d-none')) continue;
                                 if(j==0 || j == 1) {
@@ -1022,7 +1023,7 @@
                                     }
                                     tab.rows[j].childNodes[10].style.width = '200px';
                                     tab.rows[j].childNodes[2].style.width = '100px';
-                                }
+                                } 
                                 else if(j < (tab.rows.length-3))
                                 {
                                     tab.rows[j].childNodes[0].remove();
@@ -1050,15 +1051,15 @@
                             var real_tab = document.getElementById('table-list-analysis');
                             var tab = real_tab.cloneNode(true);
                             tab_text=tab_text+"<tr><td colspan='19' style='font-size:24px;font-weight:bold;border-left:hidden;border-top:hidden;border-right:hidden;text-align:center;vertical-align:middle;'>航船动态分析</td></tr>";
-
-                            for(var j = 0; j < tab.rows.length ; j++)
+                            
+                            for(var j = 0; j < tab.rows.length ; j++) 
                             {
                                 if (tab.rows[j].classList.contains('d-none')) continue;
                                 if(j==0 || j == 1) {
                                     for (var i=0; i<tab.rows[j].childElementCount*2;i+=2) {
                                         tab.rows[j].childNodes[i].style.backgroundColor = '#d9f8fb';
                                     }
-                                }
+                                } 
                                 else if(j >= (tab.rows.length-3)) {
                                     for (var i=0; i<tab.rows[j].childElementCount*2;i+=2) {
                                         if (j == (tab.rows.length-1))
@@ -1103,14 +1104,14 @@
 
                     searchObj.shipName = result['shipName'];
                     shipInfo = result['shipInfo'];
-
+                    
                     if(voyId == '')
                         if(searchObj.voy_list.length > 0) {
                             searchObj.activeVoy = searchObj.voy_list[0]['Voy_No'];
                         }
                     else
                         searchObj.activeVoy = voyId;
-
+                    
                     // searchObj.setPortName();
                     if(searchObj.record_type == 'all')
                         searchObj.getData();

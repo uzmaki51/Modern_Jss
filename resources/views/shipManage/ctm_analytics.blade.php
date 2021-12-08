@@ -81,7 +81,7 @@ $ships = Session::get('shipList');
                                             <thead class="">
                                                 <tr class="ctm-analytics">
                                                     <th colspan="4">
-                                                        <span class="for-pc">{{ isset($shipName['shipName_En']) ? $shipName['shipName_En'] : '' }}&nbsp;&nbsp;&nbsp;</span>@{{ activeYear }}年 CTM<span style="color:red">(¥)</span>
+                                                        <span class="for-pc">{{ $shipName['shipName_En'] }}&nbsp;&nbsp;&nbsp;</span>@{{ activeYear }}年 CTM<span style="color:red">(¥)</span>
                                                     </th>
                                                     <th colspan="3" style="border-left: 2px solid #ff9207;">
                                                         CTM<span style="color:#1565C0">($)</span>
@@ -189,7 +189,7 @@ $ships = Session::get('shipList');
                                             <thead class="">
                                                 <tr class="ctm-analytics">
                                                     <th colspan="13">
-                                                        {{ isset($shipName['shipName_En']) ? $shipName['shipName_En'] : '' }}&nbsp;&nbsp;&nbsp;@{{ activeYear }}年 支出分析
+                                                        {{ $shipName['shipName_En'] }}&nbsp;&nbsp;&nbsp;@{{ activeYear }}年 支出分析
                                                     </th>
                                                 </tr>
                                                 <tr>

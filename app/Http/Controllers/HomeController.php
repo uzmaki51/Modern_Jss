@@ -102,7 +102,7 @@ class HomeController extends Controller {
 		
 		//return $noattachments;
 
-		$report_year = isset($settings['report_year']) ? $settings['report_year'] : date("Y-m-d");
+		$report_year = $settings['report_year'];
 		$now = date('Y-m-d', strtotime("$report_year-1-1"));
 		$next = date('Y-m-d', strtotime("$report_year-12-31"));
 			
@@ -127,19 +127,11 @@ class HomeController extends Controller {
 		$equipment = $shipEquip->getDataForDash();
 
 		$tbl = new ShipCertRegistry();
-		if(!isset($settings->cert_expire_date))
-			$cert_expire_date = 60;
-		else $cert_expire_date = $settings->cert_expire_date;
-
-		$expireCert = $tbl->getExpiredList($cert_expire_date);
+		$expireCert = $tbl->getExpiredList($settings->cert_expire_date);
 		$tbl = new ShipMember();
-		$expireMemberCert = $tbl->getExpiredList($cert_expire_date);
-
-		$portYear = isset($settings['port_year']) ? $settings['port_year'] : date("Y");
-		$reportYear = isset($settings['report_year']) ? $settings['report_year'] : date("Y");
-
-		$voyNo_from = substr($portYear, 2, 2) . '00';
-		$voyNo_to = substr($reportYear, 2, 2) + 1;
+		$expireMemberCert = $tbl->getExpiredList($settings->cert_expire_date);
+		$voyNo_from = substr($settings['port_year'], 2, 2) . '00';
+		$voyNo_to = substr($settings['report_year'], 2, 2) + 1;
 		$voyNo_to = $voyNo_to . '00';
 
 		$topPorts = CP::where('Voy_No','>=', $voyNo_from)->where('Voy_No','<',$voyNo_to)
@@ -158,11 +150,10 @@ class HomeController extends Controller {
 		}
 		$securityType = SecurityCert::all();
 
-		
-		$profitYear = isset($settings['profit_year']) ? $settings['profit_year'] : date("Y");
+		//
 		$decision = new DecisionReport();
-		$profit_list = $decision->getProfit($profitYear);
-//dump($profit_list);die;
+		$profit_list = $decision->getProfit($settings['report_year']);
+
 		return view('home.front', [
 			'shipList'          => $shipList,
 			'reportList'        => $reportList,

@@ -111,7 +111,7 @@ $isHolder = Session::get('IS_HOLDER');
     <script src="{{ asset('/assets/js/x-editable/ace-editable.min.js') }}"></script>
     <script src="{{ cAsset('assets/js/jsquery.dataTables.js') }}"></script>
     <script src="{{ asset('/assets/js/dataTables.rowsGroup.js') }}"></script>
-
+    
     <?php
 	echo '<script>';
 	echo 'var CurrencyLabel = ' . json_encode(g_enum('CurrencyLabel')) . ';';
@@ -141,7 +141,7 @@ $isHolder = Session::get('IS_HOLDER');
             $.fn.editableform.loading = "<div class='editableform-loading'><i class='light-blue icon-2x icon-spinner icon-spin'></i></div>";
             $.fn.editableform.buttons = '';
         });
-
+            
         var listTable = null;
         function initTable() {
             listTable = $('#table-shipmember-list').DataTable({
@@ -221,7 +221,7 @@ $isHolder = Session::get('IS_HOLDER');
         year = $("#select-year option:selected").val();
         month = $("#select-month option:selected").val();
         shipId = $("#select-ship").val();
-        $('#search_info').html('"' + __parseStr($("#select-ship option:selected").attr('data-name')) + '" ' + year + '年' + month + '月');
+        $('#search_info').html('"' + $("#select-ship option:selected").attr('data-name') + '" ' + year + '年' + month + '月');
         initTable();
         function setValue(e, v, isNumber) {
             if (v == null || isNaN(v) || v == '') {
@@ -248,7 +248,7 @@ $isHolder = Session::get('IS_HOLDER');
             var SendR = $('input[name="SendR[]"]');
             var SendD = $('input[name="SendD[]"]');
             var No = $('.add-no');
-
+            
             var sum_R = 0;
             var sum_D = 0;
             var sum_P = 0;
@@ -325,7 +325,7 @@ $isHolder = Session::get('IS_HOLDER');
             year = $("#select-year option:selected").val();
             month = $("#select-month option:selected").val();
             if (shipName == "") return;
-            $('#search_info').html('"' + __parseStr($("#select-ship option:selected").attr('data-name')) + '" ' + year + '年' + month + '月');
+            $('#search_info').html('"' + $("#select-ship option:selected").attr('data-name') + '" ' + year + '年' + month + '月');
 
             if (listTable == null) {
                 initTable();
@@ -376,7 +376,7 @@ $isHolder = Session::get('IS_HOLDER');
             if ((newForm !== origForm) && !submitted) {
                 var confirmationMessage = 'It looks like you have been editing something. '
                                     + 'If you leave before saving, your changes will be lost.';
-                alertAudio();
+                alertAudio();                                    
                 bootbox.confirm(confirmationMessage, function (result) {
                     if (!result) {
                         return;
@@ -391,7 +391,7 @@ $isHolder = Session::get('IS_HOLDER');
                 $('#select-year').val(prevYear);
                 changeYear();
             }
-
+            
         });
 
         function changeMonth() {
@@ -407,7 +407,7 @@ $isHolder = Session::get('IS_HOLDER');
             if ((newForm !== origForm) && !submitted) {
                 var confirmationMessage = 'It looks like you have been editing something. '
                                     + 'If you leave before saving, your changes will be lost.';
-                alertAudio();
+                alertAudio();                                    
                 bootbox.confirm(confirmationMessage, function (result) {
                     if (!result) {
                         return;
@@ -460,7 +460,7 @@ $isHolder = Session::get('IS_HOLDER');
                 calcReport();
             });
         }
-
+        
         function fnExcelReport()
         {
             var tab_text="<table border='1px' style='text-align:center;vertical-align:middle;'>";
@@ -468,7 +468,7 @@ $isHolder = Session::get('IS_HOLDER');
             var tab = real_tab.cloneNode(true);
             //var tab = document.getElementById('table-shipmember-list');
             tab_text=tab_text+"<tr><td colspan='10' style='font-size:24px;font-weight:bold;border-left:hidden;border-top:hidden;border-right:hidden;text-align:center;vertical-align:middle;'>" + $('#search_info').html() + "份工资汇款单</td></tr>";
-            for(var j = 0 ; j < tab.rows.length ; j++)
+            for(var j = 0 ; j < tab.rows.length ; j++) 
             {
                 if (j == 0) {
                     for (var i=0; i<tab.rows[j].childElementCount;i++) {
@@ -510,10 +510,10 @@ $isHolder = Session::get('IS_HOLDER');
             tab_text= tab_text.replaceAll(/<img[^>]*>/gi,"");
             tab_text= tab_text.replaceAll(/<input[^>]*>|<\/input>/gi, "");
 
-            var filename = $("#select-ship option:selected").html() + '_' + year + '_' + month + '_工资汇款单';
+            var filename = $("#select-ship option:selected").html() + '_' + year + '年_' + month + '月_工资汇款单';
 
             //$('#test').html(tab_text);
-            exportExcel(tab_text, filename, year + '_' + month + '_工资汇款单');
+            exportExcel(tab_text, filename, year + '年_' + month + '月_工资汇款单');
             return 0;
         }
 
@@ -557,12 +557,6 @@ $isHolder = Session::get('IS_HOLDER');
             }
         }
         checkPos();
-
-        function __parseStr(value) {
-            if(value == undefined || value == null || value == 0 || value == '') return '';
-
-            return value;
-        }
     </script>
 
 @endsection
