@@ -19,7 +19,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="col-md-7">
-                            <strong class="f-right" style="font-size: 20px; padding-top: 6px;">吉速船舶有限公司</strong>
+                            <strong class="f-right" style="font-size: 20px; padding-top: 6px;">船舶有限公司</strong>
                         </div>
                         <div class="col-md-5" style="padding:unset!important">
                             <div class="btn-group f-right">
