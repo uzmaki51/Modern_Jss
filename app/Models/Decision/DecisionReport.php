@@ -505,7 +505,10 @@ class DecisionReport extends Model {
 
 			$voy = new Voy();
 			$retVal = $voy->getVoyInfoByYear($shipid, $year);
-			$records[$index]['voy_time'] = $retVal['total_time'];
+			if($retVal != 0)
+				$records[$index]['voy_time'] = $retVal['total_time'];
+			else 
+				$records[$index]['voy_time'] = 0;
 
 
 			$min_date = VoyLog::where('Ship_ID', $shipid)->where('CP_ID','<',$voyNo_from)->where('Voy_Status', DYNAMIC_CMPLT_DISCH)->orderBy('Voy_Date', 'desc')->orderBy('Voy_Hour', 'desc')->orderBy('Voy_Minute', 'desc')->orderBy('GMT', 'desc')->first();

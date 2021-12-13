@@ -20,7 +20,7 @@ class Voy extends Model
 
         $shipInfo = ShipRegister::where('IMO_No', $shipId)->first();
 
-        if($shipInfo == null) return -99;
+        if($shipInfo == null) return 0;
 
         $filterYear = substr($year, -2);
         $voyList = self::where('Ship_ID', $shipId)->whereRaw(DB::raw('mid(CP_ID, 1, 2) like ' . $filterYear))->orderBy('CP_ID', 'asc')->groupBy('CP_ID')->select('CP_ID')->get();
