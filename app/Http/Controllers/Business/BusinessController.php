@@ -70,7 +70,7 @@ class BusinessController extends Controller {
     }
 
     public function dailyAverageCost(Request $request) {
-
+        
         $url = $request->path();
         $breadCrumb = BreadCrumb::getBreadCrumb($url);
 
@@ -98,17 +98,16 @@ class BusinessController extends Controller {
             $costs = ExpectedCosts::where('shipNo', $shipId)->where('year',$year)->first();
             //var_dump($costs['input1']);die;
         }
-
-
-        $start_year = ShipMember::orderByDesc('DateOnboard')->first();
-        if(!isset($start_year)) {
-            $start_year = date("Y");
+        
+        
+        $start_year = ShipMember::select(DB::raw('MIN(DateOnboard) as min_date'))->first();
+        if(empty($start_year)) {
+            $start_year = '2020-01-01';
         } else {
-            $start_year = $start_year['DateOnboard'];
+            $start_year = $start_year['min_date'];
         }
-
         $start_year = date("Y", strtotime($start_year));
-
+        
         return view('business.daily_average_cost', array(
             'shipList'   => $shipList,
             'shipId'     => $shipId,
@@ -158,38 +157,34 @@ class BusinessController extends Controller {
         $breadCrumb = BreadCrumb::getBreadCrumb($url);
 
         $params = $request->all();
-		if(isset($params['shipId']) && $params['shipId'] != 0) {
+		if(isset($params['shipId'])) {
             $shipId = $params['shipId'];
             $firstShipInfo = ShipRegister::where('RegStatus', '!=', 3)->where('IMO_No', $shipId)->first();
             $shipName = isset($firstShipInfo->NickName) &&  $firstShipInfo->NickName != '' ? $firstShipInfo->NickName : $firstShipInfo->shipName_En;
         } else {
             $firstShipInfo = ShipRegister::where('RegStatus', '!=', 3)->orderBy('id')->first();
-            if(!isset($firstShipInfo)) {
-                $shipId = 0;
-                $shipName = '';
-            } else {
-                $shipId = $firstShipInfo->IMO_No;
-                $shipName = isset($firstShipInfo->NickName) &&  $firstShipInfo->NickName != '' ? $firstShipInfo->NickName : $firstShipInfo->shipName_En;
-            }
+            if($firstShipInfo == null && $firstShipInfo == false)
+                return redirect()->back();
+
+            $shipId = $firstShipInfo->IMO_No;
+            $shipName = isset($firstShipInfo->NickName) &&  $firstShipInfo->NickName != '' ? $firstShipInfo->NickName : $firstShipInfo->shipName_En;
         }
 
         if(isset($params['voy_id']))
             $voy_id = $params['voy_id'];
         else
             $voy_id = null;
-
+            
 
         $user_pos = Auth::user()->pos;
         if($user_pos == STAFF_LEVEL_SHAREHOLDER || $user_pos == STAFF_LEVEL_CAPTAIN) {
             $shipList = ShipRegister::getShipForHolder();
-            if(count($shipList) > 0)
-                $shipId = $shipList[0]->IMO_No;
-            else $shipid = 0;
+            $shipId = $shipList[0]->IMO_No;
         }
         else {
             $shipList = ShipRegister::where('RegStatus', '!=', 3)->orderBy('id')->get();
         }
-
+        
         $cp_list = CP::where('Ship_ID', $shipId)->whereNotNull('net_profit_day')->orderBy('Voy_No', 'desc')->get();
         $tmp = CP::where('Ship_ID', $shipId)->orderBy('net_profit_day', 'desc')->first();
         if($tmp == null || $tmp == false) {
@@ -218,7 +213,7 @@ class BusinessController extends Controller {
 
         $status = Session::get('status');
         $costs = ExpectedCosts::where('shipNo', $shipId)->where('year',$year)->first();
-
+        
         if($costs == null) {
             $costDay = 0;
             $elseCost = 0;
@@ -240,7 +235,7 @@ class BusinessController extends Controller {
             'cp_list'       =>  $cp_list,
             'voy_id'        =>  $voy_id,
             'status'        =>  $status,
-
+            
             'maxVoyNo'      => $maxVoyNo,
             'maxFreight'    => $maxFreight,
             'minVoyNo'      => $minVoyNo,
@@ -262,10 +257,10 @@ class BusinessController extends Controller {
             $shipId = $params['shipId'];
         } else {
             $firstShipInfo = ShipRegister::where('RegStatus', '!=', 3)->orderBy('id')->first();
-            if(!isset($firstShipInfo))
-                $shipId = 0;
-            else
-                $shipId = $firstShipInfo->IMO_No;
+            if($firstShipInfo == null && $firstShipInfo == false)
+                return redirect()->back();
+
+            $shipId = $firstShipInfo->IMO_No;
         }
 
         $voyId = '';
@@ -274,8 +269,8 @@ class BusinessController extends Controller {
         }
 
         $shipInfo = ShipRegister::where('RegStatus', '!=', 3)->where('IMO_No', $shipId)->first();
-        if(!isset($shipInfo))
-            $shipName = '';
+        if($shipInfo == null || $shipInfo == false)
+            return redirect()->back();
         else {
             $shipName = $shipInfo->shipName_En;
         }
@@ -354,7 +349,7 @@ class BusinessController extends Controller {
         $params = $request->all();
         if(!isset($params['shipId']))
             return redirect()->back();
-
+        
         $shipId = $params['shipId'];
         $ids = $params['id'];
         $CP_ID = $params['_CP_ID'];
@@ -365,7 +360,7 @@ class BusinessController extends Controller {
                 if($item != '' && $item != null) {
                     $voyLog = VoyLog::find($item);
                 }
-
+                
                 $voyLog['CP_ID'] = $CP_ID;
                 $voyLog['Ship_ID'] = $shipId;
                 if(isset($params['Voy_Date'][$key]) && $params['Voy_Date'][$key] != '0000-00-00' && $params['Voy_Date'][$key] != '')
@@ -397,18 +392,18 @@ class BusinessController extends Controller {
 
         return redirect('/business/dynRecord?shipId=' . $shipId . '&voyNo=' . $CP_ID);
     }
-
+    
     public function saveVoyContract(Request $request) {
         $params = $request->all();
 
         if(isset($params['shipId'])) {
             $shipId = $params['shipId'];
-        } else
+        } else 
             return redirect()->back();
 
         if (isset($params['voy_no'])) {
             $Voy_No = $params['voy_no'];
-        } else
+        } else 
             return redirect()->back();
 
         if(isset($params['voy_id'])) {
@@ -428,11 +423,11 @@ class BusinessController extends Controller {
             return redirect()->back()->with(['status'=>'error']);
         }
 
-
+        
         $cpTbl['currency'] = !isset($params['currency']) ? 1 : $params['currency'];
         $cpTbl['rate'] = $params['rate'];
         $cpTbl['CP_kind'] = $params['cp_type'];
-
+        
         if ($params['cp_date'] == '')
             $cpTbl['CP_Date'] = null;
         else
@@ -510,11 +505,11 @@ class BusinessController extends Controller {
         $cpTbl['down_port_price'] = str_replace(',','',substr($params['down_port_price'], 2));
         $cpTbl['cost_per_day'] = str_replace(',','',substr($params['cost_per_day'], 2));
         $cpTbl['cost_else'] = str_replace(',','',substr($params['cost_else'], 2));
-
+        
         $cpTbl->save();
 
         return redirect()->back();
-
+        
     }
 
     public function saveTcContract(Request $request) {
@@ -522,12 +517,12 @@ class BusinessController extends Controller {
 
         if(isset($params['shipId'])) {
             $shipId = $params['shipId'];
-        } else
+        } else 
             return redirect()->back();
 
         if (isset($params['voy_no'])) {
             $Voy_No = $params['voy_no'];
-        } else
+        } else 
             return redirect()->back();
 
         if(isset($params['voy_id'])) {
@@ -621,7 +616,7 @@ class BusinessController extends Controller {
         $cpTbl->save();
 
         return redirect()->back();
-
+        
     }
 
     public function saveNonContract(Request $request) {
@@ -629,12 +624,12 @@ class BusinessController extends Controller {
 
         if(isset($params['shipId'])) {
             $shipId = $params['shipId'];
-        } else
+        } else 
             return redirect()->back();
 
         if (isset($params['voy_no'])) {
             $Voy_No = $params['voy_no'];
-        } else
+        } else 
             return redirect()->back();
 
         if(isset($params['voy_id'])) {
@@ -702,7 +697,7 @@ class BusinessController extends Controller {
         $cpTbl->save();
 
         return redirect()->back();
-
+        
     }
 
     public function saveCargoList(Request $request) {
@@ -740,7 +735,7 @@ class BusinessController extends Controller {
 			}
 		}
 
-        return ShipPort::all();
+        return ShipPort::orderBy('Port_En', 'asc')->get();
     }
 
     public function saveCtmList(Request $request) {
@@ -750,7 +745,7 @@ class BusinessController extends Controller {
             $ids = $params['id'];
         else
             return redirect()->back();
-
+        
         if(isset($params['shipId']))
             $shipId = $params['shipId'];
 
@@ -760,7 +755,7 @@ class BusinessController extends Controller {
         if(isset($params['activeYear']))
             $activeYear = $params['activeYear'];
 
-
+        
         $seperator_symbol = g_enum('CurrencyLabel')[$ctm_type];
 
         foreach($ids as $key => $item) {
@@ -773,7 +768,7 @@ class BusinessController extends Controller {
                 $tbl['reg_date'] = $reg_date;
             else
                 $tbl['reg_date'] = null;
-
+            
             $tbl['shipId'] = $shipId;
             $tbl['voy_no'] = $params['voy_no'][$key];
             $tbl['ctm_no'] = $params['ctm_no'][$key];
@@ -812,11 +807,11 @@ class BusinessController extends Controller {
                 $tbl['attachment_link'] = null;
                 $tbl['file_name'] = null;
             }
-
+            
             $tbl->save();
-
+            
         }
-
+        
         return redirect('/business/ctm?shipId=' . $shipId . '&year=' . $activeYear . '&type=' . $ctm_type);
     }
 
@@ -838,13 +833,12 @@ class BusinessController extends Controller {
         } else {
             if(count($shipList) > 0)
                 $shipId = $shipList[0]->IMO_No;
-            else {
-                $shipId = 0;
-            }
+            else
+                return redirect()->back();
         }
 
         $shipInfo = ShipRegister::where('RegStatus', '!=', 3)->where('IMO_No', $shipId)->first();
-        if(!isset($shipInfo))
+        if($shipInfo == null)
             $shipName = '';
         else
             $shipName = $shipInfo->Nick_Name != '' ? $shipInfo->Nick_Name : $shipInfo->shipName_En;
@@ -884,17 +878,13 @@ class BusinessController extends Controller {
 
 
         $params = $request->all();
-        $shipId = $request->get('shipId');
+        $shipId = $request->get('shipId'); 
 	    $shipNameInfo = null;
         if(isset($shipId)) {
 	        $shipNameInfo = ShipRegister::where('RegStatus', '!=', 3)->where('IMO_No', $shipId)->first();
         } else {
 	        $shipNameInfo = ShipRegister::where('RegStatus', '!=', 3)->orderBy('id')->first();
-			if(count($shipRegList) > 0)
-				$shipId = $shipRegList[0]->IMO_No;
-			else {
-                $shipId = 0;
-            }
+            $shipId = $shipRegList[0]->IMO_No;
 	        //$shipId = $shipNameInfo['IMO_No'];
         }
 
@@ -911,7 +901,7 @@ class BusinessController extends Controller {
             $type = $params['type'];
         else {
             $type = 'CNY';
-        }
+        }        
 
         return view('business.ctm.index', [
         	    'shipList'      =>  $shipRegList,
@@ -929,7 +919,7 @@ class BusinessController extends Controller {
         $params = $request->all();
         if(!isset($params['shipId']))
             return redirect()->back();
-
+        
         $shipId = $params['shipId'];
         $voyId = $params['voyId'];
 
@@ -937,7 +927,7 @@ class BusinessController extends Controller {
             $settleMain = VoySettleMain::find($params['main_id']);
         else
             $settleMain = new VoySettleMain();
-
+        
         $settleMain['shipId']                   = $shipId;
         $settleMain['voyId']                    = $voyId;
         $settleMain['load_date']                = $params['load_date'] . ' ' . $params['load_hour'] . ':' . $params['load_minute'] . ':00';
@@ -977,7 +967,7 @@ class BusinessController extends Controller {
 
         $settleElse->save();
 
-
+        
         $loadIds = $params['load_id'];
         foreach($loadIds as $key => $id) {
             if(isset($id) && $id != '') {
@@ -1043,7 +1033,7 @@ class BusinessController extends Controller {
         }
 
         $loadIds = $params['fuel_id'];
-
+        
         foreach($loadIds as $key => $id) {
             if(isset($id) && $id != '') {
                 $settleElse = VoySettleElse::find($id);
@@ -1058,7 +1048,7 @@ class BusinessController extends Controller {
                 $settleElse['arrival_date'] = $params['fuel_arrival_date'][$key] . ' ' . $params['fuel_arrival_hour'][$key] . ':' . $params['fuel_arrival_minute'][$key] . ':00';
             else
                 $settleElse['arrival_date'] = null;
-
+            
             if(isset($params['fuel_depart_date'][$key]) && $params['fuel_depart_date'][$key] != '' && $params['fuel_depart_date'][$key] != EMPTY_DATE)
                 $settleElse['load_date'] = $params['fuel_depart_date'][$key] . ' ' . $params['fuel_depart_hour'][$key] . ':' . $params['fuel_depart_minute'][$key] . ':00';
             else
@@ -1147,8 +1137,6 @@ class BusinessController extends Controller {
         $retVal['portList'] = ShipPort::orderBy('Port_En', 'asc')->get();
         $retVal['cargoList'] = Cargo::orderBy('name', 'asc')->get();
 
-        $retVal['shipInfo'] = !isset($retVal['shipInfo']) ? [] : $retVal['shipInfo'];
-
         return response()->json($retVal);
     }
 
@@ -1191,7 +1179,7 @@ class BusinessController extends Controller {
         $id = $params['id'];
         ShipPort::where('id', $id)->delete();
 
-        return response()->json(ShipPort::all());
+        return response()->json(ShipPort::orderBy('Port_En', 'asc')->get());
     }
 
     public function ajaxVoyList(Request $request) {
@@ -1219,7 +1207,7 @@ class BusinessController extends Controller {
         $shipId = $params['shipId'];
 
         $cpInfo = CP::where('id', $id)->first();
-
+        
         $voyNo = $cpInfo->Voy_No;
         $decision = DecisionReport::where('voyNo', $voyNo)->where('shipNo', $shipId)->first();
         if($decision != null) {
@@ -1259,7 +1247,7 @@ class BusinessController extends Controller {
         // 1. Get last record before this voy.
         $before = $tbl->getBeforeInfo($shipId, $voyId);
 
-        // 2. Get last record of this voy.
+        // 2. Get last record of this voy. 
         $last = $tbl->getLastInfo($shipId, $voyId);
 
         // 3. Get current voy data.
@@ -1324,7 +1312,7 @@ class BusinessController extends Controller {
             $retVal['min_date'] = $prevData;
             if($retVal['min_date'] == null)
                 $retVal['min_date'] = false;
-
+                
             $retTmp = [];
             $voyArray = [];
             $tmpVoyId = 0;
@@ -1350,9 +1338,9 @@ class BusinessController extends Controller {
                         foreach($LPort as $port)
                             $tmp .= $port->Port_En . ', ';
                         $cp_list[$cp_key]->LPort = substr($tmp, 0, strlen($tmp) - 2);
-
+            
                         $DPort = $cp_item->DPort;
-
+            
                         $DPort = $cp_item->DPort;
                         $DPort = explode(',', $DPort);
                         $DPort = ShipPort::whereIn('id', $DPort)->get();
@@ -1366,7 +1354,7 @@ class BusinessController extends Controller {
 
                 $retTmp[$item->CP_ID][] = $item;
                 $tmpVoyId = $item->CP_ID;
-
+                
             }
             $retVal['currentData'] = $retTmp;
             $retVal['voyData'] = $voyArray;
@@ -1487,7 +1475,7 @@ class BusinessController extends Controller {
 
         $voySettleTbl = new VoySettle();
         $is_exist = VoySettleMain::where('shipId', $shipId)->where('voyId', $voyId)->first();
-
+        
         // If don't exist saved data in voy settle table.
         if($is_exist == null) {
             $retVal = $voySettleTbl->getTotalData($shipId, $voyId);
