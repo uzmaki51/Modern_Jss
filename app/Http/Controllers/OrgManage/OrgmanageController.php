@@ -418,15 +418,10 @@ class OrgmanageController extends Controller
 	    $user->pos = $param['pos'];
 
 	    $user->entryDate = $param['enterdate'] == '' ? null : $param['enterdate'];
-	    $releaseDate = $param['releaseDate'];
 	    if(!empty($param['enterdate']))
 		    $user->entryDate = $param['enterdate'];
 
-	    if(!empty($param['releaseDate'])) {
-		    $user->releaseDate = $param['releaseDate'];
-		    $user->status = STATUS_BANNED;
-	    } else
-		    $user->status = STATUS_ACTIVE;
+        $user->status = STATUS_ACTIVE;
 
 	    // $user->isAdmin = (isset($param['isAdmin']) && $param['isAdmin'] == 1) ? 1 : ($param['pos'] == STAFF_LEVEL_SHAREHOLDER ? STAFF_LEVEL_SHAREHOLDER : 0);
 
@@ -486,11 +481,7 @@ class OrgmanageController extends Controller
 	    if(!empty($param['enterdate']))
 	        $user->entryDate = $param['enterdate'];
 
-	    if(!empty($param['releaseDate'])) {
-		    $user->releaseDate = $param['releaseDate'];
-		    $user->status = STATUS_BANNED;
-	    } else
-		    $user->status = STATUS_ACTIVE;
+        $user->status = STATUS_ACTIVE;
 
         if($param['pos'] == STAFF_LEVEL_MANAGER) $user->isAdmin = STAFF_LEVEL_MANAGER;
         else $user->isAdmin = STATUS_BANNED;
