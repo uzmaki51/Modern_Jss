@@ -66,7 +66,7 @@ Route::group(['prefix' => 'ajax'], function() {
 	Route::post('report/getData',    [App\Http\Controllers\Decision\DecisionController::class, 'ajaxReportData']);
 	Route::post('report/fileupload',    [App\Http\Controllers\Decision\DecisionController::class, 'ajaxReportFile']);
 	Route::post('decide/noattachments', [App\Http\Controllers\Decision\DecisionController::class, 'ajaxNoAttachments']);
-	
+
 	Route::post('object', [App\Http\Controllers\Decision\DecisionController::class, 'ajaxObject']);
 	Route::post('report/attachment/delete', [App\Http\Controllers\Decision\DecisionController::class, 'ajaxDeleteReportAttach']);
 	Route::post('report/delete', [App\Http\Controllers\Decision\DecisionController::class, 'ajaxDelete']);
@@ -109,9 +109,9 @@ Route::group(['prefix' => 'ajax'], function() {
 	Route::post('shipManage/equipment/require/list', [App\Http\Controllers\ShipManage\ShipRegController::class, 'ajaxReqEquipmentList']);
 	Route::post('shipManage/equipment/require/delete', [App\Http\Controllers\ShipManage\ShipRegController::class, 'ajaxShipReqEquipDelete']);
 	Route::post('shipManage/equipment/require/type/list', [App\Http\Controllers\ShipManage\ShipRegController::class, 'ajaxShipReqEquipTypeList']);
-	Route::post('shipManage/equipment/require/type/delete', [App\Http\Controllers\ShipManage\ShipRegController::class, 'ajaxShipReqEquipTypeDelete']);	
+	Route::post('shipManage/equipment/require/type/delete', [App\Http\Controllers\ShipManage\ShipRegController::class, 'ajaxShipReqEquipTypeDelete']);
 
-	Route::post('shipManage/evaluation/list', [App\Http\Controllers\ShipManage\ShipRegController::class, 'ajaxEvaluation']);	
+	Route::post('shipManage/evaluation/list', [App\Http\Controllers\ShipManage\ShipRegController::class, 'ajaxEvaluation']);
 	Route::post('shipManage/evaluation/else', [App\Http\Controllers\ShipManage\ShipRegController::class, 'ajaxEvaluationElse']);
 
 	//Business
@@ -128,7 +128,7 @@ Route::group(['prefix' => 'ajax'], function() {
 	Route::post('business/voy/list', [App\Http\Controllers\Business\BusinessController::class, 'ajaxVoyAllList']);
 	Route::post('business/dynamic/search', [App\Http\Controllers\Business\BusinessController::class, 'ajaxDynamicSearch']);
 	Route::post('business/dynamic/multiSearch', [App\Http\Controllers\Business\BusinessController::class, 'ajaxDynamicMultiSearch']);
-	Route::post('business/ctm/list', [App\Http\Controllers\Business\BusinessController::class, 'ajaxCtm']);	
+	Route::post('business/ctm/list', [App\Http\Controllers\Business\BusinessController::class, 'ajaxCtm']);
 	Route::post('business/ctm/delete', [App\Http\Controllers\Business\BusinessController::class, 'ajaxCtmDelete']);
 	Route::post('shipmanage/ctm/total', [App\Http\Controllers\ShipManage\ShipRegController::class, 'ajaxCtmTotal']);
 	Route::post('shipmanage/ctm/debit', [App\Http\Controllers\ShipManage\ShipRegController::class, 'ajaxCtmDebit']);
@@ -166,8 +166,8 @@ Route::group(['prefix' => 'ajax'], function() {
 Route::group(['prefix' => 'business'], function() {
 	Route::get('contract', [App\Http\Controllers\Business\BusinessController::class, 'contract']);
 	Route::post('voyContractRegister', [App\Http\Controllers\Business\BusinessController::class, 'saveVoyContract']);
-	Route::post('saveCargoList', [App\Http\Controllers\Business\BusinessController::class, 'saveCargoList']);	
-	Route::post('savePortList', [App\Http\Controllers\Business\BusinessController::class, 'savePortList']);	
+	Route::post('saveCargoList', [App\Http\Controllers\Business\BusinessController::class, 'saveCargoList']);
+	Route::post('savePortList', [App\Http\Controllers\Business\BusinessController::class, 'savePortList']);
 	Route::post('tcContractRegister', [App\Http\Controllers\Business\BusinessController::class, 'saveTcContract']);
 	Route::post('nonContractRegister', [App\Http\Controllers\Business\BusinessController::class, 'saveNonContract']);
 	Route::get('dynRecord', [App\Http\Controllers\Business\BusinessController::class, 'dynRecord']);

@@ -15,7 +15,7 @@ $isHolder = Session::get('IS_HOLDER');
         var HOLDER = '{!! STAFF_LEVEL_SHAREHOLDER !!}';
         var CAPTAIN = '{!! STAFF_LEVEL_CAPTAIN !!}';
         var STAFF_LEVEL_MANAGER = '{!! STAFF_LEVEL_MANAGER !!}';
-        var IS_HOLDER = '{!! $userinfo['pos'] !!}';
+        var IS_HOLDER = '{!! isset($userinfo['pos']) ? $userinfo['pos'] : 0 !!}';
     </script>
 @endsection
 
@@ -101,7 +101,7 @@ $isHolder = Session::get('IS_HOLDER');
                         </div>
                     </div>
 
-                    
+
                     <div class="col-xs-6 col-sm-6">
                         <div class="profile-user-info-striped member-table-outer-border">
                             <div class="profile-info-row member-table-border">
