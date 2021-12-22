@@ -358,7 +358,7 @@ class ShipMemberController extends Controller
         }
         $member->save();
 
-        return $memberId;
+        return $member->id;
     }
 
     public function updateMemberMainData(Request $request, $memberId) {
