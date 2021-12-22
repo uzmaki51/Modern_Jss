@@ -358,10 +358,6 @@ class ShipMemberController extends Controller
         }
         $member->save();
 
-        if($memberId == "") {
-            $memberId = ShipMember::all()->last()->id;
-        }
-
         return $memberId;
     }
 
