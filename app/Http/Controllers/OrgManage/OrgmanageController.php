@@ -385,7 +385,7 @@ class OrgmanageController extends Controller
         if(isset($param['shipList'])) {
 			$shipList = $param['shipList'];
             $ship_count = count($shipList);
-            if($param['pos'] == STAFF_LEVEL_SHAREHOLDER || $param['pos'] == STAFF_LEVEL_CAPTAIN)
+            if($param['pos'] == STAFF_LEVEL_CAPTAIN)
             {
                 if ($ship_count == 0) {
                     return redirect()->back()->with(['state'=>'请选择船舶。', 'userId'=>'']);
@@ -394,7 +394,7 @@ class OrgmanageController extends Controller
                 }
             }
 		} else {
-            if($param['pos'] == STAFF_LEVEL_SHAREHOLDER || $param['pos'] == STAFF_LEVEL_CAPTAIN)
+            if($param['pos'] == STAFF_LEVEL_CAPTAIN)
             {
                 return redirect()->back()->with(['state'=>'请选择船舶。', 'userId'=>'']);
             }
@@ -442,7 +442,7 @@ class OrgmanageController extends Controller
         if(isset($param['shipList'])) {
 			$shipList = $param['shipList'];
             $ship_count = count($shipList);
-            if($param['pos'] == STAFF_LEVEL_SHAREHOLDER || $param['pos'] == STAFF_LEVEL_CAPTAIN)
+            if($param['pos'] == STAFF_LEVEL_CAPTAIN)
             {
                 if ($ship_count == 0) {
                     return redirect()->back()->with(['state'=>'请选择船舶。', 'userId'=>'']);
@@ -451,7 +451,7 @@ class OrgmanageController extends Controller
                 }
             }
 		} else {
-            if($param['pos'] == STAFF_LEVEL_SHAREHOLDER || $param['pos'] == STAFF_LEVEL_CAPTAIN)
+            if($param['pos'] == STAFF_LEVEL_CAPTAIN)
             {
                 return redirect()->back()->with(['state'=>'请选择船舶。', 'userId'=>'']);
             }
