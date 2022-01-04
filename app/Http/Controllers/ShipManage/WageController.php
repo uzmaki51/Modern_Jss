@@ -250,7 +250,7 @@ class WageController extends Controller
             ->get();
         }
 
-        $start_year = ShipMember::orderByDesc('DateOnboard')->first();
+        $start_year = ShipMember::orderBy('DateOnboard')->first();
         if(!isset($start_year)) {
             $start_year = date("Y-01-01");
         } else {
@@ -296,7 +296,7 @@ class WageController extends Controller
             ->leftJoin('tb_ship', 'tb_ship.id', '=', 'tb_ship_register.Shipid')->orderBy('tb_ship_register.id')
             ->get();
         }
-        $start_year = ShipMember::orderByDesc('DateOnboard')->first();
+        $start_year = ShipMember::orderBy('DateOnboard')->first();
         if(!isset($start_year)) {
             $start_year = date("Y-01-01");
         } else {
@@ -334,7 +334,7 @@ class WageController extends Controller
         else {
             $shipList = ShipRegister::orderBy('id')->get();
         }
-        $start_year = ShipMember::orderByDesc('DateOnboard')->first();
+        $start_year = ShipMember::orderBy('DateOnboard')->first();
         if(!isset($start_year)) {
             $start_year = date("Y-01-01");
         } else {
