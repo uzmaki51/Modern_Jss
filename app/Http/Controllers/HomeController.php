@@ -99,6 +99,7 @@ class HomeController extends Controller {
         $noattachments = DecisionReport::where(function($query) {
 			$query->where('attachment',0)->orWhere('attachment',null);
 		})->where('state', '!=', 3)->where('ishide',0)->get();
+		
 
 		//return $noattachments;
 
@@ -131,7 +132,7 @@ class HomeController extends Controller {
 		$tbl = new ShipMember();
 		$expireMemberCert = $tbl->getExpiredList($settings->cert_expire_date);
 		$voyNo_from = substr($settings['port_year'], 2, 2) . '00';
-		$voyNo_to = substr($settings['report_year'], 2, 2) + 1;
+		$voyNo_to = substr($settings['port_year'], 2, 2) + 1;
 		$voyNo_to = $voyNo_to . '00';
 
 		$topPorts = CP::where('Voy_No','>=', $voyNo_from)->where('Voy_No','<',$voyNo_to)
@@ -152,7 +153,7 @@ class HomeController extends Controller {
 
 		//
 		$decision = new DecisionReport();
-		$profit_list = $decision->getProfit($settings['report_year']);
+		$profit_list = $decision->getProfit($settings['profit_year']);
 
 		return view('home.front', [
 			'shipList'          => $shipList,
