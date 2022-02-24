@@ -330,7 +330,7 @@
                     voyId: voyId,
                 },
                 success: function(data, status, xhr) {
-                    let cpInfo = data['cpInfo'];
+                    let cpInfo = data['cpInfo'];console.log(data)
                     let realInfo = data['realInfo'];
 
                     equipObj = new Vue({
