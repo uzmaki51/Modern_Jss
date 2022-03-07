@@ -41,6 +41,7 @@ class VoyLog extends Model
         return $result;
     }
 
+
     public static function addShipMovement($data){
 
     }
