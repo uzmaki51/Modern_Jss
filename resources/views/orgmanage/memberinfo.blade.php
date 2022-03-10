@@ -19,7 +19,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="col-md-7">
-                            <strong class="f-right" style="font-size: 20px; padding-top: 6px;">船舶有限公司</strong>
+                            <strong class="f-right" style="font-size: 20px; padding-top: 6px;">大连世联船务有限公司</strong>
                         </div>
                         <div class="col-md-5" style="padding:unset!important">
                             <div class="btn-group f-right">
@@ -90,7 +90,7 @@
             tab_text +="<table border='1px' style='text-align:center;vertical-align:middle;'>";
             var real_tab = document.getElementById('table-shipmember-list');
             var tab = real_tab.cloneNode(true);
-            tab_text=tab_text+"<tr><td colspan='8' style='font-size:24px;font-weight:bold;border-left:hidden;border-top:hidden;border-right:hidden;text-align:center;vertical-align:middle;'>吉速船舶有限公司</td></tr>";
+            tab_text=tab_text+"<tr><td colspan='8' style='font-size:24px;font-weight:bold;border-left:hidden;border-top:hidden;border-right:hidden;text-align:center;vertical-align:middle;'>大连世联船务有限公司</td></tr>";
 
             for(var j = 0; j < tab.rows.length ; j++)
             {

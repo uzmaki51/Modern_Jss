@@ -309,7 +309,7 @@ class ExcelController extends Controller {
         foreach($units as $unit) {
             if($unit['parentId'] == 0) {
                 $memberList = UserInfo::getDirectlyUserList($unit['id']); // 직속부서의 리용자들의 ID를 반점으로 区分하여 얻는다.
-                $unit['title'] = '大连吉速船舶有限公司';
+                $unit['title'] = '大连世联船务有限公司';
             } else {
                 $memberList = UserInfo::getUserListByUnit($unit['id']); // 해당부서의 리용자들의 ID를 반점으로 区分하여 얻는다.
             }
