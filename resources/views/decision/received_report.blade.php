@@ -1223,7 +1223,7 @@
                         })) {
                             let report_date = moment(reportObj.report_date);
 							let validate_date = moment(reportObj.report_date, 'YYYY-MM-DD', true).isValid();
-                            if(validate_date && report_date > "2000-01-01")
+                            if(validate_date)
                                 $('#report-form').submit();
                             else  {
                                 bootbox.alert('申请日期形式不对。')
