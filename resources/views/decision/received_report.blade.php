@@ -1222,7 +1222,7 @@
                             }
                         })) {
                             let report_date = moment(reportObj.report_date);
-							let validate_date = moment(reportObj.report_date, 'YYYY-MM-DD', true).isValid();
+                            let validate_date = moment(report_date).isValid();
                             if(validate_date)
                                 $('#report-form').submit();
                             else  {
