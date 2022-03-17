@@ -1594,6 +1594,8 @@
             var month = parseInt(cleanDateString.substr(4, 2));
             var day = parseInt(cleanDateString.substr(6, 2));
             
+            
+
             var daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
             if (year % 400 == 0 || (year % 100 != 0 && year % 4 == 0)) {
                 daysInMonth[1] = 29;
@@ -1601,6 +1603,7 @@
             if (month < 1 || month > 12 || day < 1 || day > daysInMonth[month - 1]) {
                 return false;
             }
+            month = month - 1;
             
             var composedDate = new Date(year, month, day);
             return composedDate.getDate() == day &&
