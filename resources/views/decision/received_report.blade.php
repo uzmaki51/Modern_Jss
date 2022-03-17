@@ -164,7 +164,9 @@
                                                         申请日期
                                                     </td>
                                                     <td class="custom-modal-td-text1">
-                                                        <input type="text" name="report_date" style="display: inline-block;" class="form-control white-bg date-picker" v-model="report_date" @click="dateModify($event)" >
+                                                        <!--input type="text" name="report_date" style="display: inline-block;" class="form-control white-bg date-picker" v-model="report_date" @click="dateModify($event)"-->
+                                                        <input type="text" name="report_date" style="display: inline-block;" class="form-control white-bg" alt="asdf" title="YYYY-mm-dd" v-model="report_date">
+                                                        <label class="d-inline-block" style="margin-left:4px;">(YYYY-mm-dd)</label>
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -1226,15 +1228,14 @@
                             }
                         })) {
                             let report_date = moment(reportObj.report_date);
-                            let validate_date = moment(report_date).isValid();
+                            //let validate_date = moment(report_date).isValid();
+                            let validate_date = isValidDate(reportObj.report_date)
                             if(validate_date)
                                 $('#report-form').submit();
                             else  {
-                                bootbox.alert('申请日期形式不对。')
+                                bootbox.alert('申请日期形式不正确。');
                                 return false;
                             }
-                                
-
                             return true;
                         } else {
                             $(e.target).removeAttr('disabled');
@@ -1585,6 +1586,34 @@
         //         button.prop('disabled', false);
         //     }
         // });
+        function isValidDate(date)
+        {
+            var matches = /^([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/.exec(date);;
+            if (matches == null) return false;
+            if (date.length != 10) return false;
+
+            // Remove any non digit characters
+            var cleanDateString = date.replace(/\D/g, ''); 
+            var year = parseInt(cleanDateString.substr(0, 4));
+            var month = parseInt(cleanDateString.substr(4, 2));
+            var day = parseInt(cleanDateString.substr(6, 2));
+            
+            
+
+            var daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+            if (year % 400 == 0 || (year % 100 != 0 && year % 4 == 0)) {
+                daysInMonth[1] = 29;
+            }
+            if (month < 1 || month > 12 || day < 1 || day > daysInMonth[month - 1]) {
+                return false;
+            }
+            month = month - 1;
+            
+            var composedDate = new Date(year, month, day);
+            return composedDate.getDate() == day &&
+                    composedDate.getMonth() == month &&
+                    composedDate.getFullYear() == year;
+        }
     </script>
 
 @stop
