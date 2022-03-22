@@ -61,9 +61,21 @@
                             @endforeach
                         @endif
                     </select>
+                    <label style="margin-left: 8px;">种类</label>
+                    <select type="text" class="custom-select d-inline-block" id="doc-type" style="width:80px">
+                        <option value=""></option>
+                        @foreach(g_enum('ReportTypeData') as $key => $item)
+                            <option value="{{ $key }}">{{ $item }}</option>
+                        @endforeach
+                    </select>
                 </div>
                 <div class="col-md-6">
                     <div class="btn-group f-right">
+                        <div class="form-inline d-flex f-left mt-1" style="margin-top: 6px; cursor: pointer">
+                            <label for="amount-sort" class="text-black" style="cursor: pointer">金额</label>
+                            <input type="checkbox" class="mt-0" style="margin-left: 4px; cursor: pointer" id="amount-sort">
+                        </div>
+
                         @if(!Auth::user()->isAdmin)
                             <a class="btn btn-sm btn-success no-radius show-modal">
                                 <img src="{{ cAsset('assets/images/submit.png') }}" class="report-label-img">起草
@@ -164,9 +176,7 @@
                                                         申请日期
                                                     </td>
                                                     <td class="custom-modal-td-text1">
-                                                        <!--input type="text" name="report_date" style="display: inline-block;" class="form-control white-bg date-picker" v-model="report_date" @click="dateModify($event)"-->
-                                                        <input type="text" name="report_date" style="display: inline-block;" class="form-control white-bg" alt="asdf" title="YYYY-mm-dd" v-model="report_date">
-                                                        <label class="d-inline-block" style="margin-left:4px;">(YYYY-mm-dd)</label>
+                                                        <input type="text" name="report_date" style="display: inline-block;" class="form-control white-bg date-picker" v-model="report_date" @click="dateModify($event)" readonly>
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -1078,6 +1088,7 @@
                     changeObjType: function(e) {
                         let value = $(e.target).val();
                         this.object_type = value;
+
 						if(reportObj.currentReportType == '{{ REPORT_TYPE_EVIDENCE_IN }}') {
                             reportObj.profitType = FeeTypeData[reportObj.currentReportType];
                         } else {
@@ -1087,11 +1098,13 @@
                                 reportObj.profitType = OutComeData2;
                             }
                         }
+                        
                     },
                     dateModify(e) {
                         $(e.target).on("change", function() {
                             reportObj.report_date = $(this).val();
                         });
+                        $(e.target).focus();
                     },
                     reportSubmit(e) {
                         $('[name=reportType]').val(0);
@@ -1233,7 +1246,7 @@
                             if(validate_date)
                                 $('#report-form').submit();
                             else  {
-                                bootbox.alert('申请日期形式不正确。');
+                                bootbox.alert('申请日期形式不正确。')
                                 return false;
                             }
                             return true;
@@ -1598,8 +1611,6 @@
             var month = parseInt(cleanDateString.substr(4, 2));
             var day = parseInt(cleanDateString.substr(6, 2));
             
-            
-
             var daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
             if (year % 400 == 0 || (year % 100 != 0 && year % 4 == 0)) {
                 daysInMonth[1] = 29;
@@ -1614,6 +1625,25 @@
                     composedDate.getMonth() == month &&
                     composedDate.getFullYear() == year;
         }
+
+        $("#amount-sort").on('change', function(e) {
+            let checked = $(this).prop('checked');
+            if(checked) {
+                listTable.column(8).search(1, false, false);
+            } else {
+                listTable.column(8).search(0, false, false);
+            }
+
+            listTable.draw();
+        })
+
+        $("#doc-type").on('change', function() {
+            let val = $(this).val();
+
+            listTable.column(11).search(val, false, false);
+
+            listTable.draw();
+        })
     </script>
 
 @stop

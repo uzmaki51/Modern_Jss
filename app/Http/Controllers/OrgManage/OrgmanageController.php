@@ -83,12 +83,12 @@ class OrgmanageController extends Controller
         $name = $request->get('unitName');
 
         $isExist = Unit::where('title', $name)->first();
-
+        
         if($isExist)
             return;
-
+        
         $last = Unit::where('parentId', $parentId)->orderBy('orderkey', 'desc')->first();
-
+        
         if(is_null($last)) {
             $parent = Unit::find($parentId);
             $newKey = $parent['orderkey'].$this->int2keystr(1);
@@ -178,10 +178,11 @@ class OrgmanageController extends Controller
         $report_year = $request->get('select-report-year');
         $dyn_year = $request->get('select-dyn-year');
         $port_year = $request->get('select-port-year');
+        $cargo_year = $request->get('select-cargo-year');
         $profit_year = $request->get('select-profit-year');
         $settings = new Settings();
         //$settings::first()->update(['graph_year'=> $graph_year,'graph_ship'=>$graph_ship,'cert_expire_date'=>$cert_expire_date,'report_year'=>$report_year,'dyn_year'=>$dyn_year]);
-        Settings::where('id', 1)->update(['graph_year'=> $graph_year,'graph_ship'=>$graph_ship,'cert_expire_date'=>$cert_expire_date,'report_year'=>$report_year,'dyn_year'=>$dyn_year,'port_year'=>$port_year,'profit_year'=>$profit_year]);
+        Settings::where('id', 1)->update(['graph_year'=> $graph_year,'graph_ship'=>$graph_ship,'cert_expire_date'=>$cert_expire_date,'report_year'=>$report_year,'dyn_year'=>$dyn_year,'port_year'=>$port_year,'cargo_year'=>$cargo_year,'profit_year'=>$profit_year]);
 
         $report_ids = $request->get('visible_id');
         $report_values = $request->get('visible_value');
@@ -290,7 +291,7 @@ class OrgmanageController extends Controller
         $posList = Post::all(['id', 'title']);
 
         $userlist = User::where('status', STATUS_ACTIVE)->where('is_show', '!=', STAFF_LEVEL_MANAGER)->orderBy('pos', 'asc')->get();
-
+        
         return view('orgmanage.memberinfo',
                 ['list'         =>$userlist,
                 'unitList'      =>$unitList,
@@ -334,7 +335,6 @@ class OrgmanageController extends Controller
 
         $userid = $request->get('uid');
         $userinfo = User::find($userid);
-
         $shipList = ShipRegister::where('RegStatus', '!=', 3)->orderBy('id')->get();
 
         return view('orgmanage.addmember',
@@ -358,7 +358,7 @@ class OrgmanageController extends Controller
     /*
     public function checkShipPrivilege($param) {
         return redirect()->back()->with(['state'=>'BBBBB', 'userId'=>'']);
-
+        
         if(isset($param['shipList'])) {
 			$shipList = $param['shipList'];
             $ship_count = count($shipList);
@@ -378,9 +378,9 @@ class OrgmanageController extends Controller
         }
     }
     */
-
+    
     public function updateMember(Request $request) {
-
+        
         $param = $request->all();
         if(isset($param['shipList'])) {
 			$shipList = $param['shipList'];
@@ -416,7 +416,7 @@ class OrgmanageController extends Controller
 	    $user->phone = $param['phone'];
         $user->remark = isset($param['remark']) ? $param['remark'] : '';
 	    $user->pos = $param['pos'];
-
+        
 	    $user->entryDate = $param['enterdate'] == '' ? null : $param['enterdate'];
 	    $releaseDate = $param['releaseDate'];
 	    if(!empty($param['enterdate']))
@@ -469,7 +469,7 @@ class OrgmanageController extends Controller
         } else
             $filename = null;
 
-
+        
 
         $request->validate([
             'account'       => 'required|unique:tb_users'
@@ -652,7 +652,7 @@ class OrgmanageController extends Controller
                 }
             }
         }
-
+        
 		$insertData = array();
 		$insertData = ['menu'     => $allowmenus];
 
@@ -667,7 +667,7 @@ class OrgmanageController extends Controller
 		} else {
             $insertData['shipList'] = '';
         }
-
+        
 		$user = new User();
 		User::where('id', $userid)->update($insertData);
 
