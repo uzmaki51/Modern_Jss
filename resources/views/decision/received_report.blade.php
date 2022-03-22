@@ -72,7 +72,7 @@
                 <div class="col-md-6">
                     <div class="btn-group f-right">
                         <div class="form-inline d-flex f-left mt-1" style="margin-top: 6px; cursor: pointer">
-                            <label for="amount-sort" class="text-black" style="cursor: pointer">金额</label>
+                            <label for="amount-sort" class="text-black" style="cursor: pointer">金额升序</label>
                             <input type="checkbox" class="mt-0" style="margin-left: 4px; cursor: pointer" id="amount-sort">
                         </div>
 
