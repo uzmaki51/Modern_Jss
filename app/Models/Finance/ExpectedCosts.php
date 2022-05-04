@@ -14,4 +14,5 @@ use Illuminate\Support\Facades\DB;
 class ExpectedCosts extends Model
 {
     protected $table = 'tb_expected_costs';
+
 }

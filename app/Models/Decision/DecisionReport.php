@@ -385,7 +385,6 @@ class DecisionReport extends Model {
 				$result[$record['shipNo']]['debit_sum'] += $record['sum'];
 			}
 		}
-
 		foreach($shipids as $shipid) {
 			if (isset($prevProfit[$shipid])) {
 				$result[$shipid]['months'][0] += $prevProfit[$shipid]['profit_sum'];

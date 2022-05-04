@@ -101,7 +101,7 @@ $isHolder = Session::get('IS_HOLDER');
                         </div>
                     </div>
 
-
+                    
                     <div class="col-xs-6 col-sm-6">
                         <div class="profile-user-info-striped member-table-outer-border">
                             <div class="profile-info-row member-table-border">

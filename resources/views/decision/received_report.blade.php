@@ -177,7 +177,6 @@
                                                     </td>
                                                     <td class="custom-modal-td-text1">
                                                         <input type="text" name="report_date" style="display: inline-block;" class="form-control white-bg date-picker" v-model="report_date" @click="dateModify($event)" readonly>
-														<!--input type="text" name="report_date" style="display: inline-block;" class="form-control white-bg" v-model="report_date" -->
                                                     </td>
                                                 </tr>
                                                 <tr>

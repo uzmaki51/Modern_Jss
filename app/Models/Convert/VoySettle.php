@@ -71,7 +71,7 @@ class VoySettle extends Model
         if($voyInfo != []) {
             $firstVoyDate = $beforeVoyInfo;
             $lastVoyDate = $voyInfo[count($voyInfo) - 1];
-
+            
             $_sailTime = 0;
             $_loadTime = 0;
             $_dischTime = 0;
@@ -225,7 +225,7 @@ class VoySettle extends Model
 
             $fuelInfo['rob_fo_2'] = 0;
             $fuelInfo['rob_do_2'] = 0;
-
+                
 
             // Voy Contract Info
             $contractInfo = $cpTbl->getContractInfo($shipId, $voyId);
@@ -253,7 +253,7 @@ class VoySettle extends Model
                 $mainInfo['lport'] = $portTbl->getPortNames($contractInfo->LPort);
                 $mainInfo['dport'] = $portTbl->getPortNames($contractInfo->DPort);
                 $mainInfo['com_fee'] = $contractInfo->com_fee;
-
+                
                 // $fuelInfo['rob_fo_price_1'] = round($contractInfo->fo_price, 2);
                 // $fuelInfo['rob_do_price_1'] = round($contractInfo->do_price, 2);
 
@@ -264,10 +264,10 @@ class VoySettle extends Model
                 $mainInfo['cargo_name'] = '';
                 $mainInfo['voy_type'] = '';
             }
-        }
+        } 
 
         $mainInfo['freight_price'] = isset($mainInfo['freight_price']) ? $mainInfo['freight_price'] : 0;
-
+        
         $mainInfo['com_fee'] = isset($mainInfo['com_fee']) ? $mainInfo['com_fee'] : 0;
 
         $elseInfo['load'] = array([]);
@@ -276,12 +276,12 @@ class VoySettle extends Model
         $creditInfo['rent_total'] = round($mainInfo['freight_price'], 2);
         $creditInfo['else'] = array(
                 array(
-                    'name'      => '运费(租金)',
+                    'name'      => '运费(租金)', 
                     'amount'    => round($mainInfo['freight_price'], 2),
                     'readonly'  => true,
-                ),
-                array(),
-                array(),
+                ), 
+                array(), 
+                array(), 
                 array()
             );
 
@@ -293,7 +293,7 @@ class VoySettle extends Model
                 'amount'        => $debitInfo['commission'],
                 'readonly'      => true,
                 'is_readonly'      => true,
-            ),
+            ), 
             array(
                 'name'          => '装货港',
                 'amount'        => 0,
@@ -312,7 +312,7 @@ class VoySettle extends Model
                 'readonly'      => true,
                 'is_readonly'      => true,
             ),
-
+            
             [], [], [], [], [], []);
 
         return array(
@@ -331,15 +331,15 @@ class VoySettle extends Model
         $settleProfit = new VoySettleProfit();
 
         $_mainInfo = VoySettleMain::where('shipId', $shipId)->where('voyId', $voyId)->first();
-        if($_mainInfo == null)
+        if($_mainInfo == null) 
             return false;
 
         $_originInfo = VoySettleElse::where('shipId', $shipId)->where('voyId', $voyId)->where('type', VOY_SETTLE_ORIGIN)->first();
-        if($_originInfo == null)
+        if($_originInfo == null) 
             $_originInfo = [];
 
         $_loadInfo = VoySettleElse::where('shipId', $shipId)->where('voyId', $voyId)->where('type', VOY_SETTLE_LOAD)->get();
-        if(!isset($_loadInfo) || count($_loadInfo) == 0)
+        if(!isset($_loadInfo) || count($_loadInfo) == 0) 
             $_loadInfo = [];
 
         $_disInfo = VoySettleElse::where('shipId', $shipId)->where('voyId', $voyId)->where('type', VOY_SETTLE_DIS)->get();
@@ -349,11 +349,11 @@ class VoySettle extends Model
         $_elseFuelInfo = VoySettleElse::where('shipId', $shipId)->where('voyId', $voyId)->where('type', VOY_SETTLE_FUEL)->get();
         if(!isset($_elseFuelInfo) || count($_elseFuelInfo) == 0)
             $_elseFuelInfo = [];
-
+        
         $_fuelInfo = VoySettleFuel::where('shipId', $shipId)->where('voyId', $voyId)->first();
         if($_fuelInfo == null)
             return false;
-
+        
         $_creditInfo = VoySettleProfit::where('shipId', $shipId)->where('voyId', $voyId)->where('type', REPORT_TYPE_EVIDENCE_IN)->orderBy('id', 'asc')->get();
         if($_creditInfo == null)
             $_creditInfo = [];
@@ -420,7 +420,7 @@ class VoySettle extends Model
             'fuel'      => $_fuelInfo,
             'credit'    => $creditInfo,
             'debit'     => $debitInfo,
-        );
+        );        
 
     }
 
@@ -449,7 +449,7 @@ class VoySettle extends Model
         if($voyInfo != []) {
             $firstVoyDate = $beforeVoyInfo;
             $lastVoyDate = $voyInfo[count($voyInfo) - 1];
-
+            
             $_sailTime = 0;
             $_loadTime = 0;
             $_dischTime = 0;
@@ -583,7 +583,7 @@ class VoySettle extends Model
                 $lastFo = $lastVoyInfo->ROB_FO;
                 $lastDo = $lastVoyInfo->ROB_DO;
             }
-
+            
             $fuelTbl = new Fuel();
             if($fuelTbl->getFuelForEval($shipId, $voyId) == []) {
                 $mainInfo['rob_fo'] = round($beforeFo + $_bunkFo - $lastFo, 2);
@@ -603,7 +603,7 @@ class VoySettle extends Model
             $mainInfo['fuel_consumpt'] = round($tmp1 + $tmp2, 2);
         }
 
-
+        
             // Voy Contract Info
             $contractInfo = $cpTbl->getContractInfo($shipId, $voyId);
             if($contractInfo != []) {
@@ -648,7 +648,7 @@ class VoySettle extends Model
                 $do_sailTmp2 = $contractInfo['do_sailing'] * $contractInfo['sail_term'];
                 $do_sailTmp3 = $contractInfo['do_waiting'] * $contractInfo['wait_day'];
                 $mainInfo['do_mt'] = round($do_sailTmp1 + $do_sailTmp2 + $do_sailTmp3, 2);
-
+                
                 $fuelInfo['rob_fo_price_1'] = round($contractInfo->fo_price, 2);
                 $fuelInfo['rob_do_price_1'] = round($contractInfo->do_price, 2);
 
@@ -665,7 +665,7 @@ class VoySettle extends Model
                         if(!isset($costs['input' . $i]) || $costs['input' . $i] == '')
                             $costs['input' . $i] = 0;
                     }
-
+        
                     $elseCost = round(($costs['input4'] + $costs['input5'] + $costs['input6'])*12/365, 0);
                 }
 
@@ -686,7 +686,7 @@ class VoySettle extends Model
         $mainInfo['soa_credit'] = $debit_credit[0] - $debit_credit[1];
 
         $mainInfo['freight_price'] = isset($mainInfo['freight_price']) ? $mainInfo['freight_price'] : 0;
-
+        
         $mainInfo['com_fee'] = isset($mainInfo['com_fee']) ? $mainInfo['com_fee'] : 0;
 
         return $mainInfo;
